@@ -128,7 +128,6 @@
             padding: 40px 24px;
             text-align: center;
             box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.15);
-            animation: bounceIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             max-width: 450px;
             width: 100%;
             display: flex;
@@ -197,7 +196,7 @@
             border-radius: 12px;
             box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.15);
             overflow: hidden;
-            display: flex;
+            display: none;
             flex-direction: column;
             opacity: 0;
             transform: scale(0.97) translateY(10px);
@@ -207,19 +206,17 @@
                         max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
                         height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
                         box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            pointer-events: none;
         }
 
         .browser-container.loaded {
             opacity: 1;
             transform: scale(1) translateY(0);
-            pointer-events: all;
+            display: flex;
         }
 
         .browser-container.maximized {
             width: 100% !important;
             max-width: 100% !important;
-            height: auto;
         }
 
         .browser-container .collapsible-wrapper {
@@ -230,10 +227,6 @@
             overflow: hidden;
             transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
                         opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .browser-container.minimized {
-            box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.15);
         }
 
         .browser-container.minimized .collapsible-wrapper {
@@ -311,24 +304,12 @@
             box-shadow: 1px 1px 0px var(--border-color);
         }
 
-        .control-dot.btn-minimize {
-            font-size: 14px;
-            line-height: 0;
-        }
         .control-dot.btn-minimize:hover {
             background-color: var(--window-blue);
             color: white;
         }
-
-        .control-dot.btn-maximize {
-            font-size: 15px;
-        }
         .control-dot.btn-maximize:hover {
             background-color: var(--accent-green);
-        }
-
-        .control-dot.btn-close {
-            font-size: 12px;
         }
         .control-dot.btn-close:hover {
             background-color: var(--close-red);
@@ -343,20 +324,9 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            overflow-x: auto;
-            white-space: nowrap;
-            -webkit-overflow-scrolling: touch;
         }
 
-        .address-bar-row::-webkit-scrollbar {
-            display: none;
-        }
-        .address-bar-row {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-
-        /* Themed Nav Arrows */
+        /* Nav Arrows */
         .nav-arrows {
             display: flex;
             gap: 6px;
@@ -410,22 +380,21 @@
             font-size: 14px;
             color: var(--text-muted);
             font-weight: 500;
-            min-width: 200px;
-            flex-shrink: 0;
             text-overflow: ellipsis;
             overflow: hidden;
-            transition: color 0.2s ease;
+            white-space: nowrap;
         }
 
-        /* Content Layout split */
+        /* Side-by-Side Content Layout Matrix */
         .window-body {
             display: grid;
             grid-template-columns: 0.85fr 1.15fr;
             min-height: 550px;
             flex-grow: 1;
+            background: #ffffff;
         }
 
-        /* Left Side Profile */
+        /* Left Side Profile Panel */
         .left-panel {
             background-color: #ffffff;
             border-right: 4px solid var(--border-color);
@@ -433,9 +402,9 @@
             display: flex;
             flex-direction: column;
             gap: 18px;
+            overflow-y: auto;
         }
 
-        /* Portrait Container for GIF */
         .portrait-wrapper {
             width: 100%;
             max-width: 280px;
@@ -457,7 +426,6 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            object-position: center center;
         }
 
         .username-badge {
@@ -526,7 +494,6 @@
             font-size: 13px;
             line-height: 1.5;
             margin: 0 0 8px 0;
-            color: var(--text-main);
         }
 
         .collection-box strong {
@@ -538,9 +505,10 @@
             background-color: #fff9fc;
             display: flex;
             flex-direction: column;
+            overflow-y: auto;
         }
 
-        /* Tab Navigation Bar */
+        /* Row Navigation Configuration */
         .tab-navigation {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -552,7 +520,7 @@
             appearance: none;
             border: none;
             border-right: 4px solid var(--border-color);
-            padding: 14px 8px;
+            padding: 14px 4px;
             background: #e2e8f0;
             color: var(--text-main);
             font-family: 'Fredoka', sans-serif;
@@ -560,8 +528,9 @@
             font-size: 13px;
             text-align: center;
             cursor: pointer;
-            position: relative;
-            z-index: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
             transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
         }
 
@@ -584,7 +553,7 @@
             animation: tabPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* Info Workspace Panels */
+        /* Workspace Panels */
         .detail-panel {
             padding: 30px;
             flex-grow: 1;
@@ -612,13 +581,11 @@
 
         .detail-content p {
             margin: 0 0 16px 0;
-            color: var(--text-main);
             font-size: 15px;
             line-height: 1.6;
             font-weight: 500;
         }
 
-        /* Info Display Sub-blocks */
         .quick-specs {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -658,7 +625,6 @@
             gap: 12px;
             font-size: 14px;
             line-height: 1.6;
-            font-weight: 500;
         }
 
         .detail-list li strong {
@@ -674,10 +640,9 @@
             text-align: center;
             font-size: 13px;
             font-weight: 700;
-            letter-spacing: 0.02em;
         }
 
-        /* --- In-app Session Closed Banner Container --- */
+        /* Closed Overlay Template */
         #closed-screen {
             display: none;
             text-align: center;
@@ -714,12 +679,41 @@
             box-shadow: 6px 6px 0px var(--border-color);
         }
 
-        .reopen-btn:active {
-            transform: translate(0, 0);
-            box-shadow: 2px 2px 0px var(--border-color);
+        /* --- Viewport Scale Vector Layer for Handheld Devices --- */
+        @media (max-width: 950px) {
+            body {
+                padding: 10px 4px;
+            }
+            .browser-container {
+                width: 920px !important;
+                transform: scale(0.42); 
+                transform-origin: center center;
+                margin: 0 auto;
+                flex-shrink: 0;
+            }
+            html, body {
+                height: 100%;
+                overflow: auto;
+            }
+            body {
+                display: block;
+                text-align: center;
+                white-space: nowrap;
+            }
+            body > * {
+                display: inline-block;
+                vertical-align: middle;
+                white-space: normal;
+            }
+            body::before {
+                content: '';
+                display: inline-block;
+                height: 100%;
+                vertical-align: middle;
+            }
         }
 
-        /* --- Custom Keyframe Animations --- */
+        /* Custom Keyframe Animations */
         @keyframes bounceIn {
             0% { transform: scale(0.3); opacity: 0; }
             50% { transform: scale(1.05); opacity: 0.8; }
@@ -741,36 +735,6 @@
         @keyframes contentFadeIn {
             0% { opacity: 0; transform: translateY(4px); }
             100% { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Responsive Settings */
-        @media (max-width: 800px) {
-            .window-body {
-                grid-template-columns: 1fr;
-            }
-            .left-panel {
-                border-right: none;
-                border-bottom: 4px solid var(--border-color);
-                padding: 20px;
-            }
-            .portrait-wrapper {
-                max-width: 220px;
-            }
-            .tab-navigation {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .button {
-                border-bottom: 2px solid var(--border-color);
-            }
-            .button:nth-child(even) {
-                border-right: none;
-            }
-            .button:hover:not(.active) {
-                transform: none;
-            }
-            .browser-container.maximized {
-                height: auto;
-            }
         }
     </style>
 </head>
@@ -847,16 +811,16 @@
 
                 <article class="right-panel">
                     <nav class="tab-navigation" role="tablist" aria-label="site menu">
-                        <button class="button active" data-target="faqs" role="tab" aria-selected="true">FAQS</button>
-                        <button class="button" data-target="rules" role="tab" aria-selected="false">TERMS</button>
-                        <button class="button" data-target="byf" role="tab" aria-selected="false">BYF</button>
-                        <button class="button" data-target="links" role="tab" aria-selected="false">LINKS</button>
+                        <button class="button" data-target="faqs" role="tab">FAQS</button>
+                        <button class="button" data-target="rules" role="tab">TERMS</button>
+                        <button class="button" data-target="byf" role="tab">BYF</button>
+                        <button class="button" data-target="links" role="tab">LINKS</button>
                     </nav>
 
-                    <div class="detail-panel" id="detail-panel" aria-live="polite">
-                        <h3 id="detail-title">FAQS INFOPACK</h3>
-                        <div class="hud-divider" aria-hidden="true"></div>
-                        <div id="dynamic-body" class="tab-fade-in"></div>
+                    <div class="detail-panel" id="detail-panel">
+                        <h3 id="detail-title">FAQS</h3>
+                        <div class="hud-divider"></div>
+                        <div id="dynamic-body"></div>
                     </div>
                 </article>
             </div>
@@ -941,18 +905,16 @@
         const backBtn = document.getElementById('nav-back');
         const forwardBtn = document.getElementById('nav-forward');
 
-        // State & History Memory Engine
+        // Infinite State Memory Navigation Engine Setup
         let currentActiveTab = 'faqs';
+        let currentScreen = 'menu'; 
         let backHistory = [];
         let forwardHistory = [];
-        let isNavigatingHistory = false; // Guard flag to prevent double history pushes
+        let isNavigatingHistory = false;
 
-        // Core Application Entry Phase Initialization
         window.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 loadingOverlay.style.opacity = '0';
-                loadingOverlay.style.transform = 'scale(1.05)';
-                
                 setTimeout(() => {
                     loadingOverlay.style.display = 'none';
                     mainMenuScreen.classList.add('show');
@@ -961,13 +923,34 @@
         });
 
         function startApp() {
-            mainMenuScreen.style.opacity = '0';
-            mainMenuScreen.style.transform = 'scale(0.97)';
+            if (!isNavigatingHistory) {
+                backHistory.push({ screen: 'menu' });
+                forwardHistory = []; // Reset forward path on forward manual actions
+            }
+            
+            currentScreen = 'browser';
+            mainMenuScreen.classList.remove('show');
             
             setTimeout(() => {
                 mainMenuScreen.style.display = 'none';
+                mainWindow.style.display = 'flex';
+                void mainWindow.offsetWidth; 
                 mainWindow.classList.add('loaded');
                 setActive(currentActiveTab);
+            }, 500);
+        }
+
+        function showMainMenu() {
+            currentScreen = 'menu';
+            mainWindow.classList.remove('loaded');
+            
+            setTimeout(() => {
+                mainWindow.style.display = 'none';
+                mainMenuScreen.style.display = 'flex';
+                void mainMenuScreen.offsetWidth;
+                mainMenuScreen.classList.add('show');
+                addressEl.textContent = "https://soobingummybear.com/";
+                updateNavigationArrows();
             }, 500);
         }
 
@@ -980,35 +963,29 @@
             const info = details[target];
             if (!info) return;
 
-            // Handle historical record building when users click tabs directly
-            if (!isNavigatingHistory && target !== currentActiveTab) {
-                backHistory.push(currentActiveTab);
-                forwardHistory = []; // Standard browsing clear behavior
+            if (!isNavigatingHistory && currentScreen === 'browser' && target !== currentActiveTab) {
+                backHistory.push({ screen: 'browser', tab: currentActiveTab });
+                forwardHistory = []; 
             }
 
             currentActiveTab = target; 
 
             bodyEl.classList.remove('tab-fade-in');
-            void bodyEl.offsetWidth; // Force rendering layer engine reflow
+            void bodyEl.offsetWidth; 
 
             titleEl.textContent = info.title;
             bodyEl.innerHTML = info.html;
-            
-            // Mirror state location change inside address path string
             addressEl.textContent = `https://soobingummybear.com/${target === 'faqs' ? '' : target}`;
-            
             bodyEl.classList.add('tab-fade-in');
 
             buttons.forEach((button) => {
                 const isActive = button.dataset.target === target;
                 button.classList.toggle('active', isActive);
-                button.setAttribute('aria-selected', String(isActive));
             });
 
             updateNavigationArrows();
         }
 
-        // Click Tab Event setup
         buttons.forEach((button) => {
             button.addEventListener('click', () => {
                 isNavigatingHistory = false;
@@ -1016,26 +993,58 @@
             });
         });
 
-        // Top Left Nav Arrows Actions Logic
+        // Unending Stack Traversal for Navigation State
         backBtn.addEventListener('click', () => {
             if (backHistory.length > 0) {
                 isNavigatingHistory = true;
-                forwardHistory.push(currentActiveTab);
-                const previousTab = backHistory.pop();
-                setActive(previousTab);
+                
+                if (currentScreen === 'browser') {
+                    forwardHistory.push({ screen: 'browser', tab: currentActiveTab });
+                } else {
+                    forwardHistory.push({ screen: 'menu' });
+                }
+
+                const previousState = backHistory.pop();
+
+                if (previousState.screen === 'menu') {
+                    showMainMenu();
+                } else {
+                    currentActiveTab = previousState.tab;
+                    if (currentScreen === 'menu') {
+                        startApp();
+                    } else {
+                        setActive(currentActiveTab);
+                    }
+                }
             }
         });
 
         forwardBtn.addEventListener('click', () => {
             if (forwardHistory.length > 0) {
                 isNavigatingHistory = true;
-                backHistory.push(currentActiveTab);
-                const nextTab = forwardHistory.pop();
-                setActive(nextTab);
+                
+                if (currentScreen === 'browser') {
+                    backHistory.push({ screen: 'browser', tab: currentActiveTab });
+                } else {
+                    backHistory.push({ screen: 'menu' });
+                }
+
+                const nextState = forwardHistory.pop();
+
+                if (nextState.screen === 'menu') {
+                    showMainMenu();
+                } else {
+                    currentActiveTab = nextState.tab;
+                    if (currentScreen === 'menu') {
+                        startApp();
+                    } else {
+                        setActive(currentActiveTab);
+                    }
+                }
             }
         });
 
-        // Window Control Operations Engine Logic
+        // Window Control Operations
         minimizeBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             mainWindow.classList.toggle('minimized');
@@ -1050,7 +1059,7 @@
 
         closeBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            mainWindow.classList.add('closed-window');
+            mainWindow.classList.remove('loaded');
             setTimeout(() => {
                 mainWindow.style.display = 'none';
                 closedScreen.style.display = 'block';
@@ -1059,13 +1068,12 @@
 
         window.reopenWindow = function() {
             closedScreen.style.display = 'none';
-            mainWindow.style.display = 'flex';
-            void mainWindow.offsetWidth; // Force engine layer reflow
-            mainWindow.classList.remove('closed-window', 'minimized', 'maximized');
-            maximizeBtn.textContent = '⧉';
-            
-            isNavigatingHistory = true; // Recover exact active tab parameters cleanly
-            setActive(currentActiveTab); 
+            isNavigatingHistory = true;
+            if (currentScreen === 'menu') {
+                showMainMenu();
+            } else {
+                startApp();
+            }
         };
     </script>
 </body>
