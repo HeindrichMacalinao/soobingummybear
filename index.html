@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>soobingummybear's website</title>
+    <title>@soobingummybear // BNS WINDOW</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
@@ -129,6 +129,7 @@
             box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.15);
             animation: bounceIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             max-width: 500px;
+            width: 100%;
         }
 
         .menu-logo {
@@ -187,7 +188,7 @@
             border-radius: 12px;
             box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.15);
             overflow: hidden;
-            display: flex;
+            display: none; 
             flex-direction: column;
             opacity: 0;
             transform: scale(0.97) translateY(10px);
@@ -195,21 +196,20 @@
                         transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
                         width 0.5s cubic-bezier(0.4, 0, 0.2, 1),
                         max-width 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-                        height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
                         box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: none;
         }
 
         .browser-container.loaded {
+            display: flex;
             opacity: 1;
             transform: scale(1) translateY(0);
             pointer-events: all;
         }
 
+        /* Maximized states now leave dimensions clean without freezing the viewport heights */
         .browser-container.maximized {
-            width: 100% !important;
-            max-width: 100% !important;
-            height: 95vh;
+            width: min(1000px, 100%) !important;
         }
 
         .browser-container .collapsible-wrapper {
@@ -361,15 +361,22 @@
             transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
         }
 
-        .nav-btn:hover {
+        .nav-btn:hover:not(:disabled) {
             background-color: var(--window-yellow);
             transform: translate(-1px, -1px);
             box-shadow: 3px 3px 0px var(--border-color);
         }
 
-        .nav-btn:active {
+        .nav-btn:active:not(:disabled) {
             transform: translate(0, 0);
             box-shadow: 1px 1px 0px var(--border-color);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
         }
 
         .mock-address-bar {
@@ -646,33 +653,59 @@
         /* --- In-app Session Closed Banner Container --- */
         #closed-screen {
             display: none;
-            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f7f9fc;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+            justify-content: center;
+            align-items: center;
+            z-index: 9998;
+        }
+
+        .closed-box {
             background: white;
             border: 4px solid var(--border-color);
             border-radius: 12px;
-            padding: 40px;
+            padding: 60px 80px;
+            text-align: center;
             box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.15);
-            max-width: 400px;
-            animation: bounceIn 0.5s ease forwards;
+            animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            max-width: 500px;
+            width: 100%;
         }
 
-        #closed-screen h2 {
+        .closed-box h2 {
             font-family: 'Fredoka', sans-serif;
+            font-size: 32px;
             color: var(--window-blue);
-            margin-top: 0;
+            margin: 0 0 12px 0;
+            font-weight: 700;
+        }
+
+        .closed-box p {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin: 0 0 40px 0;
+            font-weight: 500;
         }
 
         .reopen-btn {
             background: var(--window-pink);
             font-family: 'Fredoka', sans-serif;
             font-weight: 700;
+            font-size: 18px;
             border: 3px solid var(--border-color);
-            padding: 10px 20px;
+            padding: 16px 40px;
             border-radius: 8px;
             cursor: pointer;
             box-shadow: 4px 4px 0px var(--border-color);
             transition: transform 0.2s, box-shadow 0.2s;
-            margin-top: 12px;
+            color: var(--text-main);
         }
 
         .reopen-btn:hover {
@@ -734,8 +767,9 @@
             .button:hover:not(.active) {
                 transform: none;
             }
-            .browser-container.maximized {
-                height: auto;
+            .menu-box, .closed-box {
+                padding: 40px 30px;
+                margin: 0 15px;
             }
         }
     </style>
@@ -761,9 +795,11 @@
     </div>
 
     <div id="closed-screen">
-        <h2>Website Closed!</h2>
-        <p>You have minimized the website safely. You may press start again!</p>
-        <button class="reopen-btn" onclick="reopenWindow()">Start</button>
+        <div class="closed-box">
+            <h2>Website Closed!</h2>
+            <p>You have minimized the website safely. You may press start again!</p>
+            <button class="reopen-btn" onclick="reopenWindow()">START</button>
+        </div>
     </div>
 
     <main class="browser-container" id="main-window">
@@ -781,10 +817,10 @@
         <div class="collapsible-wrapper">
             <div class="address-bar-row">
                 <div class="nav-arrows">
-                    <button class="nav-btn" title="Back">⟨</button>
-                    <button class="nav-btn" title="Forward">⟩</button>
+                    <button class="nav-btn" id="nav-back" title="Back" disabled>⟨</button>
+                    <button class="nav-btn" id="nav-forward" title="Forward" disabled>⟩</button>
                 </div>
-                <div class="mock-address-bar">https://soobingummybear.com/</div>
+                <div class="mock-address-bar" id="address-url">https://soobingummybear.com/</div>
             </div>
 
             <div class="window-body">
@@ -898,10 +934,66 @@
         const mainMenuScreen = document.getElementById('main-menu-screen');
         const mainWindow = document.getElementById('main-window');
         const closedScreen = document.getElementById('closed-screen');
+        const addressUrl = document.getElementById('address-url');
 
         const minimizeBtn = document.getElementById('win-minimize');
         const maximizeBtn = document.getElementById('win-maximize');
         const closeBtn = document.getElementById('win-close');
+        
+        const backBtn = document.getElementById('nav-back');
+        const forwardBtn = document.getElementById('nav-forward');
+
+        // --- Navigation History State Tracking Engine ---
+        let historyStack = ['menu']; 
+        let historyIndex = 0;
+        let isNavigatingHistory = false;
+
+        function updateNavigationButtons() {
+            backBtn.disabled = historyIndex === 0;
+            forwardBtn.disabled = historyIndex === historyStack.length - 1;
+        }
+
+        function pushToHistory(state) {
+            if (isNavigatingHistory) return;
+            historyStack = historyStack.slice(0, historyIndex + 1);
+            
+            if (historyStack[historyStack.length - 1] !== state) {
+                historyStack.push(state);
+                historyIndex = historyStack.length - 1;
+            }
+            updateNavigationButtons();
+        }
+
+        function applyStateChange(state) {
+            isNavigatingHistory = true;
+            
+            if (state === 'menu') {
+                mainWindow.classList.remove('loaded');
+                setTimeout(() => {
+                    mainWindow.style.display = 'none';
+                    mainMenuScreen.style.display = 'flex';
+                    void mainMenuScreen.offsetWidth;
+                    mainMenuScreen.style.opacity = '1';
+                    mainMenuScreen.style.transform = 'scale(1)';
+                }, 400);
+                addressUrl.textContent = "https://soobingummybear.com/";
+            } else if (state.startsWith('tab-')) {
+                const targetTab = state.replace('tab-', '');
+                
+                if (mainWindow.style.display !== 'flex' || !mainWindow.classList.contains('loaded')) {
+                    mainMenuScreen.style.display = 'none';
+                    closedScreen.style.display = 'none';
+                    mainWindow.style.display = 'flex';
+                    void mainWindow.offsetWidth;
+                    mainWindow.classList.add('loaded');
+                }
+                
+                setActive(targetTab, false);
+            }
+            
+            updateNavigationButtons();
+            isNavigatingHistory = false;
+        }
 
         // --- Core Application Entry Phase Initialization ---
         window.addEventListener('DOMContentLoaded', () => {
@@ -912,6 +1004,7 @@
                 setTimeout(() => {
                     loadingOverlay.style.display = 'none';
                     mainMenuScreen.classList.add('show');
+                    updateNavigationButtons();
                 }, 500);
             }, 1300); 
         });
@@ -922,17 +1015,19 @@
             
             setTimeout(() => {
                 mainMenuScreen.style.display = 'none';
+                mainWindow.style.display = 'flex';
+                void mainWindow.offsetWidth;
                 mainWindow.classList.add('loaded');
-                setActive('faqs');
+                setActive('faqs', true);
             }, 500);
         }
 
-        function setActive(target) {
+        function setActive(target, saveHistory = true) {
             const info = details[target];
             if (!info) return;
 
             bodyEl.classList.remove('tab-fade-in');
-            void bodyEl.offsetWidth; // Force reflow
+            void bodyEl.offsetWidth; 
 
             titleEl.textContent = info.title;
             bodyEl.innerHTML = info.html;
@@ -944,45 +1039,81 @@
                 button.classList.toggle('active', isActive);
                 button.setAttribute('aria-selected', String(isActive));
             });
+
+            addressUrl.textContent = `https://soobingummybear.com/${target}`;
+
+            if (saveHistory) {
+                pushToHistory(`tab-${target}`);
+            }
         }
 
         buttons.forEach((button) => {
-            button.addEventListener('click', () => setActive(button.dataset.target));
+            button.addEventListener('click', () => setActive(button.dataset.target, true));
+        });
+
+        backBtn.addEventListener('click', () => {
+            if (historyIndex > 0) {
+                historyIndex--;
+                applyStateChange(historyStack[historyIndex]);
+            }
+        });
+
+        forwardBtn.addEventListener('click', () => {
+            if (historyIndex < historyStack.length - 1) {
+                historyIndex++;
+                applyStateChange(historyStack[historyIndex]);
+            }
         });
 
         // --- Window Operations Logic ---
         
-        // Minimize Event handler
         minimizeBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             mainWindow.classList.toggle('minimized');
         });
 
-        // Maximize Event handler
+        // Updated F11 Fullscreen Engine - Enters full screen mode cleanly without shifting layout elements or trapping scrolling behavior
         maximizeBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             mainWindow.classList.remove('minimized');
-            mainWindow.classList.toggle('maximized');
-            maximizeBtn.textContent = mainWindow.classList.contains('maximized') ? '⧈' : '⧉';
+
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().then(() => {
+                    mainWindow.classList.add('maximized');
+                }).catch(err => {
+                    mainWindow.classList.toggle('maximized');
+                });
+            } else {
+                document.exitFullscreen();
+            }
         });
 
-        // Close Event handler
+        document.addEventListener('fullscreenchange', () => {
+            if (document.fullscreenElement) {
+                mainWindow.classList.add('maximized');
+            } else {
+                mainWindow.classList.remove('maximized');
+            }
+        });
+
         closeBtn.addEventListener('click', (e) => {
             e.stopPropagation();
+            if (document.fullscreenElement) {
+                document.exitFullscreen();
+            }
             mainWindow.classList.add('closed-window');
             setTimeout(() => {
                 mainWindow.style.display = 'none';
-                closedScreen.style.display = 'block';
+                closedScreen.style.display = 'flex';
             }, 500);
         });
 
-        // Application restore engine logic
         window.reopenWindow = function() {
             closedScreen.style.display = 'none';
             mainWindow.style.display = 'flex';
-            void mainWindow.offsetWidth; // Force reflow
+            void mainWindow.offsetWidth; 
             mainWindow.classList.remove('closed-window', 'minimized', 'maximized');
-            maximizeBtn.textContent = '⧉';
+            setActive('faqs', true);
         };
     </script>
 </body>
