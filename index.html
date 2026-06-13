@@ -17,6 +17,7 @@
             --text-muted: #6e6e6e;
             --border-color: #2b2b2b;
             --accent-green: #7ee081;
+            --close-red: #ff6b6b;
         }
 
         * {
@@ -29,7 +30,6 @@
             color: var(--text-main);
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: #f7f9fc;
-            /* Fun subtle retro grid background */
             background-image: linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
                               linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
             background-size: 20px 20px;
@@ -37,9 +37,149 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow-x: hidden;
         }
 
-        /* Main Browser Window Frame */
+        /* --- Loading Screen Overlay --- */
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f7f9fc;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .loader-box {
+            background: white;
+            border: 4px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px 40px;
+            text-align: center;
+            box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.15);
+            animation: bounceIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .loader-title {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: var(--window-blue);
+        }
+
+        .loader-bar-container {
+            width: 160px;
+            height: 16px;
+            background: #e2e8f0;
+            border: 3px solid var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .loader-bar-progress {
+            width: 0%;
+            height: 100%;
+            background: var(--window-pink);
+            animation: fillProgress 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        /* --- Main Menu Screen --- */
+        #main-menu-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f7f9fc;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9998;
+            opacity: 0;
+            transform: scale(0.97);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        #main-menu-screen.show {
+            opacity: 1;
+            transform: scale(1);
+            display: flex;
+        }
+
+        .menu-box {
+            background: white;
+            border: 4px solid var(--border-color);
+            border-radius: 12px;
+            padding: 60px 80px;
+            text-align: center;
+            box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.15);
+            animation: bounceIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-width: 500px;
+        }
+
+        .menu-logo {
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 700;
+            font-size: 48px;
+            color: var(--text-main);
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+        }
+
+        .menu-title {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 32px;
+            color: var(--window-blue);
+            margin: 0 0 12px 0;
+            font-weight: 700;
+        }
+
+        .menu-subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin: 0 0 40px 0;
+            font-weight: 500;
+        }
+
+        .start-btn {
+            background: var(--window-pink);
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            border: 3px solid var(--border-color);
+            padding: 16px 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px var(--border-color);
+            transition: transform 0.2s, box-shadow 0.2s;
+            color: var(--text-main);
+        }
+
+        .start-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px var(--border-color);
+        }
+
+        .start-btn:active {
+            transform: translate(0, 0);
+            box-shadow: 2px 2px 0px var(--border-color);
+        }
+
+        /* --- Main Browser Window Frame --- */
         .browser-container {
             width: min(1000px, 100%);
             background: var(--window-bg);
@@ -49,16 +189,64 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            opacity: 0;
+            transform: scale(0.97) translateY(10px);
+            transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+                        transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                        width 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                        max-width 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                        height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                        box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+
+        .browser-container.loaded {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: all;
+        }
+
+        .browser-container.maximized {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: 95vh;
+        }
+
+        .browser-container .collapsible-wrapper {
+            display: flex;
+            flex-direction: column;
+            max-height: 2000px;
+            opacity: 1;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+                        opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .browser-container.minimized {
+            box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.15);
+        }
+
+        .browser-container.minimized .collapsible-wrapper {
+            max-height: 0px !important;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .browser-container.closed-window {
+            opacity: 0;
+            transform: scale(0.9) translateY(20px);
+            pointer-events: none;
         }
 
         /* Top Title Bar */
         .browser-header {
             background-color: var(--window-yellow);
             border-bottom: 4px solid var(--border-color);
-            padding: 12px 16px;
+            padding: 10px 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            user-select: none;
         }
 
         .window-title-group {
@@ -67,24 +255,75 @@
             gap: 8px;
         }
 
+        /* --- Theme-Fitting Y2K Tech Logo Styling --- */
         .window-logo {
             font-family: 'Fredoka', sans-serif;
             font-weight: 700;
-            font-size: 20px;
+            font-size: 35px;
             color: var(--text-main);
+            letter-spacing: 2px;
         }
 
+        /* Enhanced Cohesive Window Control Layout */
         .window-controls {
             display: flex;
             gap: 6px;
         }
 
         .control-dot {
-            width: 14px;
-            height: 14px;
+            width: 28px;
+            height: 28px;
             border: 2px solid var(--border-color);
-            border-radius: 3px;
+            border-radius: 6px;
             background: #fff;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 0;
+            color: var(--text-main);
+            box-shadow: 2px 2px 0px var(--border-color);
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                        background-color 0.2s ease, 
+                        box-shadow 0.2s ease,
+                        color 0.2s ease;
+        }
+
+        .control-dot:hover {
+            transform: scale(1.08) translate(-1px, -1px);
+            box-shadow: 3px 3px 0px var(--border-color);
+        }
+        
+        .control-dot:active {
+            transform: scale(0.95) translate(0, 0);
+            box-shadow: 1px 1px 0px var(--border-color);
+        }
+
+        .control-dot.btn-minimize {
+            font-size: 14px;
+            line-height: 0;
+        }
+        .control-dot.btn-minimize:hover {
+            background-color: var(--window-blue);
+            color: white;
+        }
+
+        .control-dot.btn-maximize {
+            font-size: 15px;
+        }
+        .control-dot.btn-maximize:hover {
+            background-color: var(--accent-green);
+        }
+
+        .control-dot.btn-close {
+            font-size: 12px;
+        }
+        .control-dot.btn-close:hover {
+            background-color: var(--close-red);
+            color: white;
         }
 
         /* Address Bar Area */
@@ -97,13 +336,40 @@
             gap: 12px;
         }
 
+        /* Themed Nav Arrows */
         .nav-arrows {
             display: flex;
-            gap: 8px;
-            color: #fff;
-            font-weight: bold;
-            font-size: 18px;
+            gap: 6px;
             user-select: none;
+        }
+
+        .nav-btn {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-main);
+            cursor: pointer;
+            box-shadow: 2px 2px 0px var(--border-color);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+        }
+
+        .nav-btn:hover {
+            background-color: var(--window-yellow);
+            transform: translate(-1px, -1px);
+            box-shadow: 3px 3px 0px var(--border-color);
+        }
+
+        .nav-btn:active {
+            transform: translate(0, 0);
+            box-shadow: 1px 1px 0px var(--border-color);
         }
 
         .mock-address-bar {
@@ -122,6 +388,7 @@
             display: grid;
             grid-template-columns: 0.85fr 1.15fr;
             min-height: 550px;
+            flex-grow: 1;
         }
 
         /* Left Side Profile */
@@ -137,21 +404,26 @@
         /* Portrait Container for GIF */
         .portrait-wrapper {
             width: 100%;
-            max-width: 280px; /* Restricts the layout size on large screens */
-            margin: 0 auto;   /* Horizontal alignment inside the panel */
+            max-width: 280px;
+            margin: 0 auto;
             border: 4px solid var(--border-color);
             border-radius: 8px;
             overflow: hidden;
-            aspect-ratio: 1 / 1; /* Crisp square structure to align nicely with user badges */
+            aspect-ratio: 1 / 1;
             background: #eee;
             box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .portrait-wrapper:hover {
+            transform: scale(1.03) rotate(-1deg);
         }
 
         .portrait-wrapper img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            object-position: center center; /* Perfectly centers the animated GIF */
+            object-position: center center;
         }
 
         .username-badge {
@@ -166,6 +438,12 @@
             font-weight: 700;
             margin: 0;
             box-shadow: 3px 3px 0px var(--border-color);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .username-badge:hover {
+            transform: translate(-1px, -1px);
+            box-shadow: 4px 4px 0px var(--border-color);
         }
 
         .bio-list {
@@ -184,6 +462,12 @@
             padding: 6px 12px;
             border-radius: 6px;
             border: 2px solid var(--border-color);
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        .bio-list li:hover {
+            transform: translateX(4px);
+            background-color: #e2e8f0;
         }
 
         .collection-box {
@@ -242,24 +526,28 @@
             font-size: 13px;
             text-align: center;
             cursor: pointer;
-            transition: background 0.2s ease;
+            position: relative;
+            z-index: 1;
+            transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
         }
 
         .button:last-child {
             border-right: none;
         }
 
-        .button:hover {
+        .button:hover:not(.active) {
             background: #cbd5e1;
+            transform: translateY(-2px);
+        }
+
+        .button:active {
+            transform: translateY(0);
         }
 
         .button.active {
             background: var(--window-pink);
             color: var(--text-main);
-        }
-
-        .button small {
-            display: none; 
+            animation: tabPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         /* Info Workspace Panels */
@@ -282,6 +570,10 @@
             height: 4px;
             background: var(--border-color);
             border-radius: 2px;
+        }
+
+        .tab-fade-in {
+            animation: contentFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
 
         .detail-content p {
@@ -308,6 +600,11 @@
             font-weight: 700;
             font-size: 14px;
             box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease;
+        }
+
+        .spec-item:hover {
+            transform: translateY(-2px);
         }
 
         .spec-item span {
@@ -346,6 +643,72 @@
             letter-spacing: 0.02em;
         }
 
+        /* --- In-app Session Closed Banner Container --- */
+        #closed-screen {
+            display: none;
+            text-align: center;
+            background: white;
+            border: 4px solid var(--border-color);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.15);
+            max-width: 400px;
+            animation: bounceIn 0.5s ease forwards;
+        }
+
+        #closed-screen h2 {
+            font-family: 'Fredoka', sans-serif;
+            color: var(--window-blue);
+            margin-top: 0;
+        }
+
+        .reopen-btn {
+            background: var(--window-pink);
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 700;
+            border: 3px solid var(--border-color);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px var(--border-color);
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 12px;
+        }
+
+        .reopen-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px var(--border-color);
+        }
+
+        .reopen-btn:active {
+            transform: translate(0, 0);
+            box-shadow: 2px 2px 0px var(--border-color);
+        }
+
+        /* --- Custom Keyframe Animations --- */
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+            70% { transform: scale(0.9); opacity: 0.9; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes fillProgress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        @keyframes tabPop {
+            0% { transform: scale(0.95); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes contentFadeIn {
+            0% { opacity: 0; transform: translateY(4px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
         /* Responsive Settings */
         @media (max-width: 800px) {
             .window-body {
@@ -357,7 +720,7 @@
                 padding: 20px;
             }
             .portrait-wrapper {
-                max-width: 220px; /* Balances container size gracefully on narrow viewports */
+                max-width: 220px;
             }
             .tab-navigation {
                 grid-template-columns: repeat(2, 1fr);
@@ -368,83 +731,118 @@
             .button:nth-child(even) {
                 border-right: none;
             }
+            .button:hover:not(.active) {
+                transform: none;
+            }
+            .browser-container.maximized {
+                height: auto;
+            }
         }
     </style>
 </head>
 <body>
 
-    <main class="browser-container">
+    <div id="loading-overlay">
+        <div class="loader-box">
+            <div class="loader-title">LOADING...</div>
+            <div class="loader-bar-container">
+                <div class="loader-bar-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="main-menu-screen">
+        <div class="menu-box">
+            <div class="menu-logo">+x+</div>
+            <h1 class="menu-title">soobingummybear's website</h1>
+            <p class="menu-subtitle">~ Welcome! Press Start to Continue! ~</p>
+            <button class="start-btn" onclick="startApp()">START</button>
+        </div>
+    </div>
+
+    <div id="closed-screen">
+        <h2>Website Closed!</h2>
+        <p>You have minimized the website safely. You may press start again!</p>
+        <button class="reopen-btn" onclick="reopenWindow()">Start</button>
+    </div>
+
+    <main class="browser-container" id="main-window">
         <header class="browser-header">
             <div class="window-title-group">
-                <div class="window-logo">✦ +x+ ✦</div>
+                <div class="window-logo">+x+</div>
             </div>
             <div class="window-controls">
-                <div class="control-dot"></div>
-                <div class="control-dot"></div>
-                <div class="control-dot"></div>
+                <button class="control-dot btn-minimize" id="win-minimize" title="Minimize">—</button>
+                <button class="control-dot btn-maximize" id="win-maximize" title="Maximize">⧉</button>
+                <button class="control-dot btn-close" id="win-close" title="Close Window">✕</button>
             </div>
         </header>
 
-        <div class="address-bar-row">
-            <div class="nav-arrows">← &nbsp; →</div>
-            <div class="mock-address-bar">https://soobingummybear.com/</div>
+        <div class="collapsible-wrapper">
+            <div class="address-bar-row">
+                <div class="nav-arrows">
+                    <button class="nav-btn" title="Back">⟨</button>
+                    <button class="nav-btn" title="Forward">⟩</button>
+                </div>
+                <div class="mock-address-bar">https://soobingummybear.com/</div>
+            </div>
+
+            <div class="window-body">
+                <article class="left-panel">
+                    <div class="portrait-wrapper">
+                        <img src="https://i.pinimg.com/originals/95/2c/db/952cdb5c74808ece2217e0dd8911d8e5.gif" alt="Soobin Arcade GIF">
+                    </div>
+
+                    <h1 class="username-badge">soobingummybear</h1>
+
+                    <ul class="bio-list">
+                        <li>drich</li>
+                        <li>he/him</li>
+                        <li>'06 liner</li>
+                        <li>3rd year BSCS student</li>
+                        <li>infp-t</li>
+                    </ul>
+
+                    <div class="collection-box">
+                        <div class="collection-title">STAN LIST</div>
+                        <p><strong>ults:</strong> zb1, and2ble, xdinary heroes, xlov, cravity, onlyoneof, txt</p>
+                        <p><strong>stan:</strong> day6, tbz, twice, fromis_9, red velvet, lucy, gfriend, loona, iz*one</p>
+                        <p><strong>casual:</strong> tws, bnd, bts, bp. ive, le sserafim, oneus, aespa, svt, enhypen, n.flying, illit, vixx, newjeans, onewe, xg, nmix, dreamcatcher, cortis, katseye</p>
+                    </div>
+                </article>
+
+                <article class="right-panel">
+                    <nav class="tab-navigation" role="tablist" aria-label="site menu">
+                        <button class="button active" data-target="faqs" role="tab" aria-selected="true">FAQS</button>
+                        <button class="button" data-target="rules" role="tab" aria-selected="false">TERMS</button>
+                        <button class="button" data-target="byf" role="tab" aria-selected="false">BYF</button>
+                        <button class="button" data-target="links" role="tab" aria-selected="false">LINKS</button>
+                    </nav>
+
+                    <div class="detail-panel" id="detail-panel" aria-live="polite">
+                        <h3 id="detail-title">FAQS INFOPACK</h3>
+                        <div class="hud-divider" aria-hidden="true"></div>
+                        <div id="dynamic-body" class="tab-fade-in"></div>
+                    </div>
+                </article>
+            </div>
+
+            <footer class="footer">
+                ✿ NOTICE: Review terms completely before claiming!
+            </footer>
         </div>
-
-        <div class="window-body">
-            <article class="left-panel">
-                <div class="portrait-wrapper">
-                    <img src="https://i.pinimg.com/originals/95/2c/db/952cdb5c74808ece2217e0dd8911d8e5.gif" alt="Soobin Arcade GIF">
-                </div>
-
-                <h1 class="username-badge">soobingummybear</h1>
-
-                <ul class="bio-list">
-                    <li>drich</li>
-                    <li>he/him</li>
-                    <li>'06 liner</li>
-                    <li>3rd year BSCS student</li>
-                    <li>infp-t</li>
-                </ul>
-
-                <div class="collection-box">
-                    <div class="collection-title">COLLECTION</div>
-                    <p><strong>ults:</strong> zb1, and2ble, xdinary heroes, xlov, cravity, onlyoneof, txt</p>
-                    <p><strong>stan:</strong> day6, tbz, twice, fromis_9, red velvet, lucy, gfriend, loona</p>
-                    <p><strong>casual:</strong> tws, bnd, ive, le sserafim, oneus, aespa, svt, enhypen, n.flying, illit, vixx, newjeans, onewe, xg, nmixx</p>
-                </div>
-            </article>
-
-            <article class="right-panel">
-                <nav class="tab-navigation" role="tablist" aria-label="site menu">
-                    <button class="button active" data-target="faqs" role="tab" aria-selected="true">FAQS</button>
-                    <button class="button" data-target="rules" role="tab" aria-selected="false">TERMS</button>
-                    <button class="button" data-target="byf" role="tab" aria-selected="false">BYF</button>
-                    <button class="button" data-target="links" role="tab" aria-selected="false">LINKS</button>
-                </nav>
-
-                <div class="detail-panel" id="detail-panel" aria-live="polite">
-                    <h3 id="detail-title">FAQS INFOPACK</h3>
-                    <div class="hud-divider" aria-hidden="true"></div>
-                    <div id="dynamic-body"></div>
-                </div>
-            </article>
-        </div>
-
-        <footer class="footer">
-            ✿ NOTICE: Review terms completely before making claims via direct message!
-        </footer>
     </main>
 
     <script>
         const details = {
             faqs: {
-                title: 'FAQS INFOPACK',
+                title: 'FREQUENTLY ASKED QUESTIONS',
                 html: `
-                    <p>Core shop operations, location properties, and structural transaction parameters:</p>
+                    <p>Please refer to the following frequently asked questions for more information:</p>
                     <div class="quick-specs">
                         <div class="spec-item"><span>LOC</span>Marikina City</div>
                         <div class="spec-item"><span>MOP</span>GCash</div>
-                        <div class="spec-item"><span>MOD</span>J&T / Flash Express / GGX / SDD Couriers</div>
+                        <div class="spec-item"><span>MOD</span>J&T Express / Flash Express / GGX / SDD Couriers</div>
                         <div class="spec-item"><span>DOP</span>Payo / DOP with NRDP</div>
                     </div>
                 `
@@ -454,20 +852,21 @@
                 html: `
                     <p>Please read our transactional boundaries safely before proceeding:</p>
                     <ul class="detail-list">
-                        <li><strong>Cancellation Protocol:</strong> Cancellation fee applies at 50% of the total item price.</li>
-                        <li><strong>Shipping Speed:</strong> Strictly no rush shipping. Dispatch occurs exclusively on personal rest/free days.</li>
-                        <li><strong>Transit Liability:</strong> Once items are transferred to couriers, the shop holds no accountability for transit discrepancies, structural damage, or lost packages.</li>
+                        <li><strong>Item Condition:</strong> Disclosed per listing. As a casual collector, my items might not meet "mint" standards. Not recommended for highly sensitive buyers.</li>
+                        <li><strong>Cancellation:</strong> Cancellation fee applies at 70% of the total item price.</li>
+                        <li><strong>Shipping:</strong> Strictly no rush shipping. Dispatch occurs exclusively on my personal rest/free days.</li>
+                        <li><strong>Transit Liability:</strong> Once items are transferred to couriers, I hold no accountability for transit discrepancies, structural damage, or lost packages.</li>
                     </ul>
                 `
             },
             byf: {
                 title: 'BEFORE YOU FOLLOW',
                 html: `
-                    <p>Personal profile parameters and interactive habits:</p>
+                    <p>My Interactive Habits >< </p>
                     <ul class="detail-list">
-                        <li>Prone to periods of highly talkative behavior.</li>
+                        <li>I tweet a lot from time to time.</li>
                         <li>Exhibits casual profanity usage and frequent keyboard smashing.</li>
-                        <li>Active university student status means account status can transition to <strong>IA (Inactive)</strong> from time to time.</li>
+                        <li>Active university student status means that I may go IA from time to time.</li>
                         <li>Interaction friendly! Please don't be shy to talk or interact with me ^^</li>
                     </ul>
                 `
@@ -475,10 +874,18 @@
             links: {
                 title: 'EXTERNAL LINKS',
                 html: `
-                    <p>Verified access channels for validity verification:</p>
+                    <p>Official channels for feedback and communication:</p>
                     <ul class="detail-list">
-                        <li><strong>Feedbacks:</strong> Search the hashtag <span style="color:var(--window-blue); font-weight:bold;">#fromdrich</span> on Twitter/X to view archived client feedback logs.</li>
-                        <li><strong>Claims Desk:</strong> Slide directly into our DMs to initialize a claim workspace session.</li>
+                        <li>
+                            <strong>Feedbacks:</strong> 
+                            <a href="https://x.com/search?q=%23from_drich&src=hashtag_click" target="_blank" style="color:var(--window-blue); font-weight:bold; text-decoration:underline;">#from_drich</a> 
+                            on Twitter/X to view buyer reviews and proofs.
+                        </li>
+                        <li>
+                            <strong>Messaging:</strong> 
+                            <a href="https://x.com/messages/compose?recipient_id=soobingummybear" target="_blank" style="color:var(--window-blue); font-weight:bold; text-decoration:underline;">Click here to DM me</a> 
+                            directly for inquiries & claiming.
+                        </li>
                     </ul>
                 `
             }
@@ -487,13 +894,50 @@
         const buttons = document.querySelectorAll('.button');
         const titleEl = document.getElementById('detail-title');
         const bodyEl = document.getElementById('dynamic-body');
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const mainMenuScreen = document.getElementById('main-menu-screen');
+        const mainWindow = document.getElementById('main-window');
+        const closedScreen = document.getElementById('closed-screen');
+
+        const minimizeBtn = document.getElementById('win-minimize');
+        const maximizeBtn = document.getElementById('win-maximize');
+        const closeBtn = document.getElementById('win-close');
+
+        // --- Core Application Entry Phase Initialization ---
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                loadingOverlay.style.opacity = '0';
+                loadingOverlay.style.transform = 'scale(1.05)';
+                
+                setTimeout(() => {
+                    loadingOverlay.style.display = 'none';
+                    mainMenuScreen.classList.add('show');
+                }, 500);
+            }, 1300); 
+        });
+
+        function startApp() {
+            mainMenuScreen.style.opacity = '0';
+            mainMenuScreen.style.transform = 'scale(0.97)';
+            
+            setTimeout(() => {
+                mainMenuScreen.style.display = 'none';
+                mainWindow.classList.add('loaded');
+                setActive('faqs');
+            }, 500);
+        }
 
         function setActive(target) {
             const info = details[target];
             if (!info) return;
 
+            bodyEl.classList.remove('tab-fade-in');
+            void bodyEl.offsetWidth; // Force reflow
+
             titleEl.textContent = info.title;
             bodyEl.innerHTML = info.html;
+            
+            bodyEl.classList.add('tab-fade-in');
 
             buttons.forEach((button) => {
                 const isActive = button.dataset.target === target;
@@ -502,12 +946,44 @@
             });
         }
 
-        // Initialize default view
-        setActive('faqs');
-
         buttons.forEach((button) => {
             button.addEventListener('click', () => setActive(button.dataset.target));
         });
+
+        // --- Window Operations Logic ---
+        
+        // Minimize Event handler
+        minimizeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            mainWindow.classList.toggle('minimized');
+        });
+
+        // Maximize Event handler
+        maximizeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            mainWindow.classList.remove('minimized');
+            mainWindow.classList.toggle('maximized');
+            maximizeBtn.textContent = mainWindow.classList.contains('maximized') ? '⧈' : '⧉';
+        });
+
+        // Close Event handler
+        closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            mainWindow.classList.add('closed-window');
+            setTimeout(() => {
+                mainWindow.style.display = 'none';
+                closedScreen.style.display = 'block';
+            }, 500);
+        });
+
+        // Application restore engine logic
+        window.reopenWindow = function() {
+            closedScreen.style.display = 'none';
+            mainWindow.style.display = 'flex';
+            void mainWindow.offsetWidth; // Force reflow
+            mainWindow.classList.remove('closed-window', 'minimized', 'maximized');
+            maximizeBtn.textContent = '⧉';
+        };
     </script>
 </body>
 </html>
