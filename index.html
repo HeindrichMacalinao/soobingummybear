@@ -265,7 +265,6 @@
             gap: 8px;
         }
 
-        /* --- Theme-Fitting Y2K Tech Logo Styling --- */
         .window-logo {
             font-family: 'Fredoka', sans-serif;
             font-weight: 700;
@@ -349,7 +348,6 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        /* Clean styling mechanism to prevent visibility issues with horizontal address setups */
         .address-bar-row::-webkit-scrollbar {
             display: none;
         }
@@ -384,15 +382,23 @@
             transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
         }
 
-        .nav-btn:hover {
+        .nav-btn:hover:not(:disabled) {
             background-color: var(--window-yellow);
             transform: translate(-1px, -1px);
             box-shadow: 3px 3px 0px var(--border-color);
         }
 
-        .nav-btn:active {
+        .nav-btn:active:not(:disabled) {
             transform: translate(0, 0);
             box-shadow: 1px 1px 0px var(--border-color);
+        }
+
+        .nav-btn:disabled {
+            background: #e2e8f0;
+            color: #a0aec0;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
         }
 
         .mock-address-bar {
@@ -408,6 +414,7 @@
             flex-shrink: 0;
             text-overflow: ellipsis;
             overflow: hidden;
+            transition: color 0.2s ease;
         }
 
         /* Content Layout split */
@@ -808,10 +815,10 @@
         <div class="collapsible-wrapper">
             <div class="address-bar-row">
                 <div class="nav-arrows">
-                    <button class="nav-btn" title="Back">⟨</button>
-                    <button class="nav-btn" title="Forward">⟩</button>
+                    <button class="nav-btn" id="nav-back" title="Back" disabled>⟨</button>
+                    <button class="nav-btn" id="nav-forward" title="Forward" disabled>⟩</button>
                 </div>
-                <div class="mock-address-bar">https://soobingummybear.com/</div>
+                <div class="mock-address-bar" id="address-text">https://soobingummybear.com/</div>
             </div>
 
             <div class="window-body">
@@ -921,6 +928,7 @@
         const buttons = document.querySelectorAll('.button');
         const titleEl = document.getElementById('detail-title');
         const bodyEl = document.getElementById('dynamic-body');
+        const addressEl = document.getElementById('address-text');
         const loadingOverlay = document.getElementById('loading-overlay');
         const mainMenuScreen = document.getElementById('main-menu-screen');
         const mainWindow = document.getElementById('main-window');
@@ -930,8 +938,14 @@
         const maximizeBtn = document.getElementById('win-maximize');
         const closeBtn = document.getElementById('win-close');
 
-        // Target memory state logic
+        const backBtn = document.getElementById('nav-back');
+        const forwardBtn = document.getElementById('nav-forward');
+
+        // State & History Memory Engine
         let currentActiveTab = 'faqs';
+        let backHistory = [];
+        let forwardHistory = [];
+        let isNavigatingHistory = false; // Guard flag to prevent double history pushes
 
         // Core Application Entry Phase Initialization
         window.addEventListener('DOMContentLoaded', () => {
@@ -957,17 +971,31 @@
             }, 500);
         }
 
+        function updateNavigationArrows() {
+            backBtn.disabled = backHistory.length === 0;
+            forwardBtn.disabled = forwardHistory.length === 0;
+        }
+
         function setActive(target) {
             const info = details[target];
             if (!info) return;
 
-            currentActiveTab = target; // Maintain memory state accurately
+            // Handle historical record building when users click tabs directly
+            if (!isNavigatingHistory && target !== currentActiveTab) {
+                backHistory.push(currentActiveTab);
+                forwardHistory = []; // Standard browsing clear behavior
+            }
+
+            currentActiveTab = target; 
 
             bodyEl.classList.remove('tab-fade-in');
-            void bodyEl.offsetWidth; // Force layout engine reflow
+            void bodyEl.offsetWidth; // Force rendering layer engine reflow
 
             titleEl.textContent = info.title;
             bodyEl.innerHTML = info.html;
+            
+            // Mirror state location change inside address path string
+            addressEl.textContent = `https://soobingummybear.com/${target === 'faqs' ? '' : target}`;
             
             bodyEl.classList.add('tab-fade-in');
 
@@ -976,10 +1004,35 @@
                 button.classList.toggle('active', isActive);
                 button.setAttribute('aria-selected', String(isActive));
             });
+
+            updateNavigationArrows();
         }
 
+        // Click Tab Event setup
         buttons.forEach((button) => {
-            button.addEventListener('click', () => setActive(button.dataset.target));
+            button.addEventListener('click', () => {
+                isNavigatingHistory = false;
+                setActive(button.dataset.target);
+            });
+        });
+
+        // Top Left Nav Arrows Actions Logic
+        backBtn.addEventListener('click', () => {
+            if (backHistory.length > 0) {
+                isNavigatingHistory = true;
+                forwardHistory.push(currentActiveTab);
+                const previousTab = backHistory.pop();
+                setActive(previousTab);
+            }
+        });
+
+        forwardBtn.addEventListener('click', () => {
+            if (forwardHistory.length > 0) {
+                isNavigatingHistory = true;
+                backHistory.push(currentActiveTab);
+                const nextTab = forwardHistory.pop();
+                setActive(nextTab);
+            }
         });
 
         // Window Control Operations Engine Logic
@@ -1007,10 +1060,12 @@
         window.reopenWindow = function() {
             closedScreen.style.display = 'none';
             mainWindow.style.display = 'flex';
-            void mainWindow.offsetWidth; // Force layout engine reflow
+            void mainWindow.offsetWidth; // Force engine layer reflow
             mainWindow.classList.remove('closed-window', 'minimized', 'maximized');
             maximizeBtn.textContent = '⧉';
-            setActive(currentActiveTab); // Memory preservation update on restore
+            
+            isNavigatingHistory = true; // Recover exact active tab parameters cleanly
+            setActive(currentActiveTab); 
         };
     </script>
 </body>
