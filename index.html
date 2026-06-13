@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@soobingummybear // BNS WINDOW</title>
+    <title>soobingummybear 👾</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
@@ -154,8 +154,17 @@
         .menu-subtitle {
             font-size: 14px;
             color: var(--text-muted);
-            margin: 0 0 32px 0;
+            margin: 0 0 12px 0;
             font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .menu-note {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin: 0 auto 28px auto;
+            max-width: 340px;
+            font-weight: 400;
             line-height: 1.4;
         }
 
@@ -198,7 +207,8 @@
             transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
                         transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
                         width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                        max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                        max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        border-bottom-width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .browser-container.loaded {
@@ -212,10 +222,16 @@
             max-width: 100% !important;
         }
 
+        .browser-container.minimized {
+            border-bottom-width: 0px;
+        }
+
         .browser-container .collapsible-wrapper {
             display: flex;
             flex-direction: column;
             width: 100%;
+            max-height: 2000px; /* High value to allow smooth accordion transition */
+            opacity: 1;
             transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
                         opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -236,6 +252,12 @@
             align-items: center;
             justify-content: space-between;
             user-select: none;
+        }
+
+        /* Adjust header border when container is minimized */
+        .browser-container.minimized .browser-header {
+            border-bottom-width: 0px;
+            transition: border-bottom-width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .window-title-group {
@@ -637,7 +659,7 @@
             max-width: 400px;
             width: 100%;
             animation: bounceIn 0.5s ease forwards;
-            margin: auto; /* Ensures centering in flexible parent layouts */
+            margin: auto;
         }
 
         #closed-screen h2 {
@@ -670,7 +692,7 @@
                 padding: 12px 8px;
                 display: flex;
                 flex-direction: column;
-                justify-content: center; /* Ensures content, main menu, and closed screens center vertically */
+                justify-content: center;
                 align-items: center;
             }
 
@@ -679,7 +701,7 @@
             }
 
             .window-body {
-                grid-template-columns: 1fr; /* Switch to singular columnar workspace */
+                grid-template-columns: 1fr;
                 min-height: auto;
             }
 
@@ -693,7 +715,6 @@
                 max-width: 200px;
             }
 
-            /* Stack Navigation tabs cleanly into a 2x2 layout matrix */
             .tab-navigation {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -718,7 +739,7 @@
             }
 
             .quick-specs {
-                grid-template-columns: 1fr; /* Stack dynamic spec items inside content panel */
+                grid-template-columns: 1fr;
                 gap: 8px;
             }
         }
@@ -764,6 +785,7 @@
             <div class="menu-logo">+x+</div>
             <h1 class="menu-title">soobingummybear's website</h1>
             <p class="menu-subtitle">~ Welcome! Press Start to Continue! ~</p>
+            <div class="menu-note">For mobile users, please use desktop site for best experience.</div>
             <button class="start-btn" onclick="startApp()">START</button>
         </div>
     </div>
@@ -986,7 +1008,6 @@
             titleEl.textContent = info.title;
             bodyEl.innerHTML = info.html;
             
-            // Fixed: State logic now correctly displays URLs explicitly mapped to their active states, including /faqs
             addressEl.textContent = `https://soobingummybear.com/${target}`;
             bodyEl.classList.add('tab-fade-in');
 
