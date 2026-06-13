@@ -188,7 +188,7 @@
             border-radius: 12px;
             box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.15);
             overflow: hidden;
-            display: none; 
+            display: flex;
             flex-direction: column;
             opacity: 0;
             transform: scale(0.97) translateY(10px);
@@ -201,13 +201,11 @@
         }
 
         .browser-container.loaded {
-            display: flex;
             opacity: 1;
             transform: scale(1) translateY(0);
             pointer-events: all;
         }
 
-        /* Maximized states now leave dimensions clean without freezing the viewport heights */
         .browser-container.maximized {
             width: min(1000px, 100%) !important;
         }
@@ -326,7 +324,7 @@
             color: white;
         }
 
-        /* Address Bar Area */
+        /* Address Bar Area Container */
         .address-bar-row {
             background-color: var(--window-blue);
             border-bottom: 4px solid var(--border-color);
@@ -334,6 +332,18 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Hide Scrollbar indicators while maintaining swipe access */
+        .address-bar-row::-webkit-scrollbar {
+            display: none;
+        }
+        .address-bar-row {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
 
         /* Themed Nav Arrows */
@@ -341,6 +351,7 @@
             display: flex;
             gap: 6px;
             user-select: none;
+            flex-shrink: 0;
         }
 
         .nav-btn {
@@ -361,22 +372,15 @@
             transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
         }
 
-        .nav-btn:hover:not(:disabled) {
+        .nav-btn:hover {
             background-color: var(--window-yellow);
             transform: translate(-1px, -1px);
             box-shadow: 3px 3px 0px var(--border-color);
         }
 
-        .nav-btn:active:not(:disabled) {
+        .nav-btn:active {
             transform: translate(0, 0);
             box-shadow: 1px 1px 0px var(--border-color);
-        }
-
-        .nav-btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            box-shadow: none;
-            transform: none;
         }
 
         .mock-address-bar {
@@ -388,6 +392,10 @@
             font-size: 14px;
             color: var(--text-muted);
             font-weight: 500;
+            min-width: 200px;
+            flex-shrink: 0;
+            text-overflow: ellipsis;
+            overflow: hidden;
         }
 
         /* Content Layout split */
@@ -653,59 +661,33 @@
         /* --- In-app Session Closed Banner Container --- */
         #closed-screen {
             display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #f7f9fc;
-            background-image: linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
-            background-size: 20px 20px;
-            justify-content: center;
-            align-items: center;
-            z-index: 9998;
-        }
-
-        .closed-box {
+            text-align: center;
             background: white;
             border: 4px solid var(--border-color);
             border-radius: 12px;
-            padding: 60px 80px;
-            text-align: center;
+            padding: 40px;
             box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.15);
-            animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            max-width: 500px;
-            width: 100%;
+            max-width: 400px;
+            animation: bounceIn 0.5s ease forwards;
         }
 
-        .closed-box h2 {
+        #closed-screen h2 {
             font-family: 'Fredoka', sans-serif;
-            font-size: 32px;
             color: var(--window-blue);
-            margin: 0 0 12px 0;
-            font-weight: 700;
-        }
-
-        .closed-box p {
-            font-size: 14px;
-            color: var(--text-muted);
-            margin: 0 0 40px 0;
-            font-weight: 500;
+            margin-top: 0;
         }
 
         .reopen-btn {
             background: var(--window-pink);
             font-family: 'Fredoka', sans-serif;
             font-weight: 700;
-            font-size: 18px;
             border: 3px solid var(--border-color);
-            padding: 16px 40px;
+            padding: 10px 20px;
             border-radius: 8px;
             cursor: pointer;
             box-shadow: 4px 4px 0px var(--border-color);
             transition: transform 0.2s, box-shadow 0.2s;
-            color: var(--text-main);
+            margin-top: 12px;
         }
 
         .reopen-btn:hover {
@@ -767,9 +749,8 @@
             .button:hover:not(.active) {
                 transform: none;
             }
-            .menu-box, .closed-box {
-                padding: 40px 30px;
-                margin: 0 15px;
+            .browser-container.maximized {
+                height: auto;
             }
         }
     </style>
@@ -795,11 +776,9 @@
     </div>
 
     <div id="closed-screen">
-        <div class="closed-box">
-            <h2>Website Closed!</h2>
-            <p>You have minimized the website safely. You may press start again!</p>
-            <button class="reopen-btn" onclick="reopenWindow()">START</button>
-        </div>
+        <h2>Website Closed!</h2>
+        <p>You have minimized the website safely. You may press start again!</p>
+        <button class="reopen-btn" onclick="reopenWindow()">Start</button>
     </div>
 
     <main class="browser-container" id="main-window">
@@ -817,10 +796,10 @@
         <div class="collapsible-wrapper">
             <div class="address-bar-row">
                 <div class="nav-arrows">
-                    <button class="nav-btn" id="nav-back" title="Back" disabled>⟨</button>
-                    <button class="nav-btn" id="nav-forward" title="Forward" disabled>⟩</button>
+                    <button class="nav-btn" title="Back">⟨</button>
+                    <button class="nav-btn" title="Forward">⟩</button>
                 </div>
-                <div class="mock-address-bar" id="address-url">https://soobingummybear.com/</div>
+                <div class="mock-address-bar">https://soobingummybear.com/</div>
             </div>
 
             <div class="window-body">
@@ -934,66 +913,10 @@
         const mainMenuScreen = document.getElementById('main-menu-screen');
         const mainWindow = document.getElementById('main-window');
         const closedScreen = document.getElementById('closed-screen');
-        const addressUrl = document.getElementById('address-url');
 
         const minimizeBtn = document.getElementById('win-minimize');
         const maximizeBtn = document.getElementById('win-maximize');
         const closeBtn = document.getElementById('win-close');
-        
-        const backBtn = document.getElementById('nav-back');
-        const forwardBtn = document.getElementById('nav-forward');
-
-        // --- Navigation History State Tracking Engine ---
-        let historyStack = ['menu']; 
-        let historyIndex = 0;
-        let isNavigatingHistory = false;
-
-        function updateNavigationButtons() {
-            backBtn.disabled = historyIndex === 0;
-            forwardBtn.disabled = historyIndex === historyStack.length - 1;
-        }
-
-        function pushToHistory(state) {
-            if (isNavigatingHistory) return;
-            historyStack = historyStack.slice(0, historyIndex + 1);
-            
-            if (historyStack[historyStack.length - 1] !== state) {
-                historyStack.push(state);
-                historyIndex = historyStack.length - 1;
-            }
-            updateNavigationButtons();
-        }
-
-        function applyStateChange(state) {
-            isNavigatingHistory = true;
-            
-            if (state === 'menu') {
-                mainWindow.classList.remove('loaded');
-                setTimeout(() => {
-                    mainWindow.style.display = 'none';
-                    mainMenuScreen.style.display = 'flex';
-                    void mainMenuScreen.offsetWidth;
-                    mainMenuScreen.style.opacity = '1';
-                    mainMenuScreen.style.transform = 'scale(1)';
-                }, 400);
-                addressUrl.textContent = "https://soobingummybear.com/";
-            } else if (state.startsWith('tab-')) {
-                const targetTab = state.replace('tab-', '');
-                
-                if (mainWindow.style.display !== 'flex' || !mainWindow.classList.contains('loaded')) {
-                    mainMenuScreen.style.display = 'none';
-                    closedScreen.style.display = 'none';
-                    mainWindow.style.display = 'flex';
-                    void mainWindow.offsetWidth;
-                    mainWindow.classList.add('loaded');
-                }
-                
-                setActive(targetTab, false);
-            }
-            
-            updateNavigationButtons();
-            isNavigatingHistory = false;
-        }
 
         // --- Core Application Entry Phase Initialization ---
         window.addEventListener('DOMContentLoaded', () => {
@@ -1004,7 +927,6 @@
                 setTimeout(() => {
                     loadingOverlay.style.display = 'none';
                     mainMenuScreen.classList.add('show');
-                    updateNavigationButtons();
                 }, 500);
             }, 1300); 
         });
@@ -1015,19 +937,17 @@
             
             setTimeout(() => {
                 mainMenuScreen.style.display = 'none';
-                mainWindow.style.display = 'flex';
-                void mainWindow.offsetWidth;
                 mainWindow.classList.add('loaded');
-                setActive('faqs', true);
+                setActive('faqs');
             }, 500);
         }
 
-        function setActive(target, saveHistory = true) {
+        function setActive(target) {
             const info = details[target];
             if (!info) return;
 
             bodyEl.classList.remove('tab-fade-in');
-            void bodyEl.offsetWidth; 
+            void bodyEl.offsetWidth; // Force reflow
 
             titleEl.textContent = info.title;
             bodyEl.innerHTML = info.html;
@@ -1039,40 +959,21 @@
                 button.classList.toggle('active', isActive);
                 button.setAttribute('aria-selected', String(isActive));
             });
-
-            addressUrl.textContent = `https://soobingummybear.com/${target}`;
-
-            if (saveHistory) {
-                pushToHistory(`tab-${target}`);
-            }
         }
 
         buttons.forEach((button) => {
-            button.addEventListener('click', () => setActive(button.dataset.target, true));
-        });
-
-        backBtn.addEventListener('click', () => {
-            if (historyIndex > 0) {
-                historyIndex--;
-                applyStateChange(historyStack[historyIndex]);
-            }
-        });
-
-        forwardBtn.addEventListener('click', () => {
-            if (historyIndex < historyStack.length - 1) {
-                historyIndex++;
-                applyStateChange(historyStack[historyIndex]);
-            }
+            button.addEventListener('click', () => setActive(button.dataset.target));
         });
 
         // --- Window Operations Logic ---
         
+        // Minimize Event handler
         minimizeBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             mainWindow.classList.toggle('minimized');
         });
 
-        // Updated F11 Fullscreen Engine - Enters full screen mode cleanly without shifting layout elements or trapping scrolling behavior
+        // Maximize Event handler (Fullscreen implementation without viewport traps)
         maximizeBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             mainWindow.classList.remove('minimized');
@@ -1080,8 +981,10 @@
             if (!document.fullscreenElement) {
                 document.documentElement.requestFullscreen().then(() => {
                     mainWindow.classList.add('maximized');
-                }).catch(err => {
+                    maximizeBtn.textContent = '⧈';
+                }).catch(() => {
                     mainWindow.classList.toggle('maximized');
+                    maximizeBtn.textContent = mainWindow.classList.contains('maximized') ? '⧈' : '⧉';
                 });
             } else {
                 document.exitFullscreen();
@@ -1091,11 +994,14 @@
         document.addEventListener('fullscreenchange', () => {
             if (document.fullscreenElement) {
                 mainWindow.classList.add('maximized');
+                maximizeBtn.textContent = '⧈';
             } else {
                 mainWindow.classList.remove('maximized');
+                maximizeBtn.textContent = '⧉';
             }
         });
 
+        // Close Event handler
         closeBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             if (document.fullscreenElement) {
@@ -1104,16 +1010,17 @@
             mainWindow.classList.add('closed-window');
             setTimeout(() => {
                 mainWindow.style.display = 'none';
-                closedScreen.style.display = 'flex';
+                closedScreen.style.display = 'block';
             }, 500);
         });
 
+        // Application restore engine logic
         window.reopenWindow = function() {
             closedScreen.style.display = 'none';
             mainWindow.style.display = 'flex';
-            void mainWindow.offsetWidth; 
+            void mainWindow.offsetWidth; // Force reflow
             mainWindow.classList.remove('closed-window', 'minimized', 'maximized');
-            setActive('faqs', true);
+            maximizeBtn.textContent = '⧉';
         };
     </script>
 </body>
