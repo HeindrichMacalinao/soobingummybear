@@ -134,15 +134,15 @@
             gap: 18px;
         }
 
-        /* Portrait sizing optimizations */
+        /* Portrait Container for GIF */
         .portrait-wrapper {
             width: 100%;
-            max-width: 280px; /* Restricts it from getting huge on big screens */
-            margin: 0 auto;   /* Centers it in the column */
+            max-width: 280px; /* Restricts the layout size on large screens */
+            margin: 0 auto;   /* Horizontal alignment inside the panel */
             border: 4px solid var(--border-color);
             border-radius: 8px;
             overflow: hidden;
-            aspect-ratio: 1 / 1; /* Crisp square crop to beautifully frame the character */
+            aspect-ratio: 1 / 1; /* Crisp square structure to align nicely with user badges */
             background: #eee;
             box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.05);
         }
@@ -151,7 +151,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            object-position: center 20%; /* Gently adjusts framing to keep focus on the eyes/face */
+            object-position: center center; /* Perfectly centers the animated GIF */
         }
 
         .username-badge {
@@ -357,7 +357,7 @@
                 padding: 20px;
             }
             .portrait-wrapper {
-                max-width: 220px; /* Gently scales down on mobile view ports so it is not overwhelming */
+                max-width: 220px; /* Balances container size gracefully on narrow viewports */
             }
             .tab-navigation {
                 grid-template-columns: repeat(2, 1fr);
@@ -393,7 +393,7 @@
         <div class="window-body">
             <article class="left-panel">
                 <div class="portrait-wrapper">
-                    <img src="https://i.pinimg.com/1200x/9c/46/a9/9c46a915eb6b867ed66f931602cdad94.jpg" alt="Soobin Arcade Portrait">
+                    <img src="https://i.pinimg.com/originals/95/2c/db/952cdb5c74808ece2217e0dd8911d8e5.gif" alt="Soobin Arcade GIF">
                 </div>
 
                 <h1 class="username-badge">soobingummybear</h1>
