@@ -781,19 +781,19 @@
     </div>
 
     <div id="main-menu-screen">
-        <div class="menu-box trigger-hover">
+        <div class="menu-box">
             <div class="menu-logo">+x+</div>
             <h1 class="menu-title">soobingummybear's website</h1>
             <p class="menu-subtitle">~ Welcome! Press Start to Continue! ~</p>
             <div class="menu-note">For mobile users, please use desktop site for best experience.</div>
-            <button class="start-btn trigger-hover" onclick="startApp()">START</button>
+            <button class="start-btn" onclick="startApp()">START</button>
         </div>
     </div>
 
     <div id="closed-screen">
         <h2>Website Closed!</h2>
         <p>You have minimized the website safely. You may press start again!</p>
-        <button class="reopen-btn trigger-hover" onclick="reopenWindow()">Start</button>
+        <button class="reopen-btn" onclick="reopenWindow()">Start</button>
     </div>
 
     <main class="browser-container" id="main-window">
@@ -802,39 +802,39 @@
                 <div class="window-logo">+x+</div>
             </div>
             <div class="window-controls">
-                <button class="control-dot btn-minimize trigger-hover" id="win-minimize" title="Minimize">—</button>
-                <button class="control-dot btn-maximize trigger-hover" id="win-maximize" title="Maximize">⧉</button>
-                <button class="control-dot btn-close trigger-hover" id="win-close" title="Close Window">✕</button>
+                <button class="control-dot btn-minimize" id="win-minimize" title="Minimize">—</button>
+                <button class="control-dot btn-maximize" id="win-maximize" title="Maximize">⧉</button>
+                <button class="control-dot btn-close" id="win-close" title="Close Window">✕</button>
             </div>
         </header>
 
         <div class="collapsible-wrapper">
             <div class="address-bar-row">
                 <div class="nav-arrows">
-                    <button class="nav-btn trigger-hover" id="nav-back" title="Back" disabled>⟨</button>
-                    <button class="nav-btn trigger-hover" id="nav-forward" title="Forward" disabled>⟩</button>
+                    <button class="nav-btn" id="nav-back" title="Back" disabled>⟨</button>
+                    <button class="nav-btn" id="nav-forward" title="Forward" disabled>⟩</button>
                 </div>
                 <div class="mock-address-bar" id="address-text">https://soobingummybear.com/</div>
             </div>
 
             <div class="window-body">
                 <article class="left-panel">
-                    <div class="portrait-wrapper trigger-hover">
+                    <div class="portrait-wrapper">
                         <img src="https://i.pinimg.com/originals/95/2c/db/952cdb5c74808ece2217e0dd8911d8e5.gif" alt="Soobin Arcade GIF">
                     </div>
 
-                    <h1 class="username-badge trigger-hover">soobingummybear</h1>
+                    <h1 class="username-badge">soobingummybear</h1>
 
                     <ul class="bio-list">
-                        <li class="trigger-hover">drich</li>
-                        <li class="trigger-hover">he/him</li>
-                        <li class="trigger-hover">'06 liner</li>
-                        <li class="trigger-hover">3rd year BSCS student</li>
-                        <li class="trigger-hover">infp-t</li>
+                        <li>drich</li>
+                        <li>he/him</li>
+                        <li>'06 liner</li>
+                        <li>3rd year BSCS student</li>
+                        <li>infp-t</li>
                     </ul>
 
                     <div class="collection-box">
-                        <div class="collection-title trigger-hover">STAN LIST</div>
+                        <div class="collection-title">STAN LIST</div>
                         <p><strong>ults:</strong> zb1, and2ble, xdinary heroes, xlov, cravity, onlyoneof, txt</p>
                         <p><strong>stan:</strong> day6, tbz, twice, fromis_9, red velvet, lucy, gfriend, loona, iz*one</p>
                         <p><strong>casual:</strong> tws, bnd, bts, bp. ive, le sserafim, oneus, aespa, svt, enhypen, n.flying, illit, vixx, newjeans, onewe, xg, nmix, dreamcatcher, cortis, katseye</p>
@@ -843,10 +843,10 @@
 
                 <article class="right-panel">
                     <nav class="tab-navigation" role="tablist" aria-label="site menu">
-                        <button class="button trigger-hover" data-target="faqs" role="tab">FAQS</button>
-                        <button class="button trigger-hover" data-target="rules" role="tab">TERMS</button>
-                        <button class="button trigger-hover" data-target="byf" role="tab">BYF</button>
-                        <button class="button trigger-hover" data-target="links" role="tab">LINKS</button>
+                        <button class="button" data-target="faqs" role="tab">FAQS</button>
+                        <button class="button" data-target="rules" role="tab">TERMS</button>
+                        <button class="button" data-target="byf" role="tab">BYF</button>
+                        <button class="button" data-target="links" role="tab">LINKS</button>
                     </nav>
 
                     <div class="detail-panel" id="detail-panel">
@@ -864,28 +864,33 @@
     </main>
 
     <script>
-        // --- Retro 8-Bit Web Audio Engine ---
+        // --- Safe Retro 8-Bit Web Audio Engine ---
         let audioCtx = null;
         let loadingInterval = null;
+        let audioInitialized = false;
 
+        // Initializes context safely upon explicit user micro-interaction
         function initAudio() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (!audioInitialized && audioCtx) {
+                audioInitialized = true;
+                // Start ticking safely only after user interaction registers
+                playLoadingTicking();
             }
         }
 
         // 1. Hover Sound: Ultra light short micro-blip
         function playHover() {
-            initAudio();
             if (!audioCtx) return;
-
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
 
             osc.type = 'square';
-            osc.frequency.setValueAtTime(880, audioCtx.currentTime); // High pitch
+            osc.frequency.setValueAtTime(880, audioCtx.currentTime);
 
-            gain.gain.setValueAtTime(0.015, audioCtx.currentTime); // Extra soft volume
+            gain.gain.setValueAtTime(0.015, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
 
             osc.connect(gain);
@@ -895,18 +900,22 @@
             osc.stop(audioCtx.currentTime + 0.03);
         }
 
-        // 2. Loading Screen Ticker loop
+        // 2. Loading Screen Ticker Loop (Safe-Mode)
         function playLoadingTicking() {
-            initAudio();
-            if (!audioCtx) return;
+            if (!audioCtx || loadingInterval) return;
 
             let tickCounter = 0;
             loadingInterval = setInterval(() => {
+                // Double check overlay is still visible before creating nodes
+                if (loadingOverlay.style.display === 'none') {
+                    stopLoadingTicking();
+                    return;
+                }
+
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
 
                 osc.type = 'triangle';
-                // Sweet rhythmic alternating 8bit ticks
                 const frequency = tickCounter % 2 === 0 ? 300 : 450;
                 osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
 
@@ -919,7 +928,7 @@
                 osc.start();
                 osc.stop(audioCtx.currentTime + 0.05);
                 tickCounter++;
-            }, 150); // Tick speed matching loader duration
+            }, 150);
         }
 
         function stopLoadingTicking() {
@@ -929,11 +938,9 @@
             }
         }
 
-        // 3. Tab & Regular Click Sound: Cohesive fast confirmation scale
+        // 3. Tab & Navigation Click
         function playTabClick() {
-            initAudio();
             if (!audioCtx) return;
-
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
 
@@ -951,13 +958,11 @@
             osc.stop(audioCtx.currentTime + 0.08);
         }
 
-        // 4. Opening / Expanding Motif (Start, Maximize, Reopen, Unminimize) - Cheerful Low to High Scale
+        // 4. Window Expanding Motif (Start, Maximize)
         function playAppOpen() {
-            initAudio();
             if (!audioCtx) return;
-
             const now = audioCtx.currentTime;
-            const notes = [440, 587.33]; // A4 to D5 crisp interval
+            const notes = [440, 587.33];
             
             notes.forEach((freq, index) => {
                 const osc = audioCtx.createOscillator();
@@ -977,13 +982,11 @@
             });
         }
 
-        // 5. Closing / Deactivating Motif (Minimize) - Reflected High to Low Scale
+        // 5. Window Shrinking Motif (Minimize)
         function playAppClose() {
-            initAudio();
             if (!audioCtx) return;
-
             const now = audioCtx.currentTime;
-            const notes = [587.33, 440]; // D5 down to A4 matching interval
+            const notes = [587.33, 440];
             
             notes.forEach((freq, index) => {
                 const osc = audioCtx.createOscillator();
@@ -1003,23 +1006,17 @@
             });
         }
 
-        // 6. Terminating / Deletion Sound (Close ✕ Button) - 8-Bit Dying Slidestate Rumble Effect
+        // 6. Custom Terminating/Dying Sound (Close ✕ Button)
         function playAppTerminate() {
-            initAudio();
             if (!audioCtx) return;
-
             const now = audioCtx.currentTime;
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
 
-            // Use sawtooth wave for that harsh crunch, classic retro-death style
             osc.type = 'sawtooth';
-            
-            // Rapidly slide the frequency down from 350Hz down to a sub-bass 60Hz rumble
             osc.frequency.setValueAtTime(350, now);
             osc.frequency.linearRampToValueAtTime(60, now + 0.28);
 
-            // Quick drop-off volume envelope
             gain.gain.setValueAtTime(0.08, now);
             gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
 
@@ -1030,17 +1027,16 @@
             osc.stop(now + 0.28);
         }
 
-
         const details = {
             faqs: {
                 title: 'FREQUENTLY ASKED QUESTIONS',
                 html: `
                     <p>Please refer to the following frequently asked questions for more information:</p>
                     <div class="quick-specs">
-                        <div class="spec-item trigger-hover"><span>LOC</span>Marikina City</div>
-                        <div class="spec-item trigger-hover"><span>MOP</span>GCash</div>
-                        <div class="spec-item trigger-hover"><span>MOD</span>J&T Express / Flash Express / GGX / SDD Couriers</div>
-                        <div class="spec-item trigger-hover"><span>DOP</span>Payo / DOP with NRDP</div>
+                        <div class="spec-item"><span>LOC</span>Marikina City</div>
+                        <div class="spec-item"><span>MOP</span>GCash</div>
+                        <div class="spec-item"><span>MOD</span>J&T Express / Flash Express / GGX / SDD Couriers</div>
+                        <div class="spec-item"><span>DOP</span>Payo / DOP with NRDP</div>
                     </div>
                 `
             },
@@ -1111,14 +1107,13 @@
         let forwardHistory = [];
         let isNavigatingHistory = false;
 
-        // Initialize ticking loader audio engine immediately on first user micro-interaction window scope
+        // Hook up user gesture initialization to kick-start sound context safely
         window.addEventListener('touchstart', initAudio, { once: true });
         window.addEventListener('mousedown', initAudio, { once: true });
+        window.addEventListener('mousemove', initAudio, { once: true });
 
+        // Timer completely uncoupled from audio loop to prevent loading screen lockouts
         window.addEventListener('DOMContentLoaded', () => {
-            // Start loading chiptune ticks immediately
-            playLoadingTicking();
-
             setTimeout(() => {
                 stopLoadingTicking();
                 loadingOverlay.style.opacity = '0';
@@ -1129,12 +1124,12 @@
             }, 1300); 
         });
 
-        // Universal Hover Audio Listener Bindings Engine
-        document.body.addEventListener('mouseenter', (event) => {
-            if (event.target && event.target.classList && event.target.classList.contains('trigger-hover')) {
+        // Safe Delegated Hover Sound Event Trigger
+        document.body.addEventListener('mouseover', (e) => {
+            if (e.target && (e.target.tagName === 'BUTTON' || e.target.classList.contains('button') || e.target.closest('.portrait-wrapper') || e.target.classList.contains('username-badge') || e.target.tagName === 'LI')) {
                 playHover();
             }
-        }, true);
+        });
 
         function startApp() {
             playAppOpen();
@@ -1266,16 +1261,11 @@
         // Window Control Operations
         minimizeBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            
-            // Check if it's currently minimized BEFORE toggling the class
             if (mainWindow.classList.contains('minimized')) {
-                // Window is being restored to normal size -> Play Open/Maximize sound
                 playAppOpen();
             } else {
-                // Window is being shrunk down -> Play Close/Minimize sound
                 playAppClose();
             }
-            
             mainWindow.classList.toggle('minimized');
         });
 
@@ -1283,19 +1273,15 @@
             e.stopPropagation();
             mainWindow.classList.remove('minimized');
             mainWindow.classList.toggle('maximized');
-            
-            // Check state to trigger appropriate cohesive chime
             if (mainWindow.classList.contains('maximized')) {
                 playAppOpen();
             } else {
                 playAppClose();
             }
-            
             maximizeBtn.textContent = mainWindow.classList.contains('maximized') ? '⧈' : '⧉';
         });
 
         closeBtn.addEventListener('click', (e) => {
-            // Trigger the special custom terminating/dying sound effect
             playAppTerminate();
             e.stopPropagation();
             mainWindow.classList.remove('loaded');
@@ -1306,1324 +1292,7 @@
         });
 
         window.reopenWindow = function() {
-            closedScreen.style.display = 'none';
-            isNavigatingHistory = true;
-            if (currentScreen === 'menu') {
-                showMainMenu();
-            } else {
-                startApp();
-            }
-        };
-    </script>
-</body>
-</html><!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>soobingummybear 👾</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --window-blue: #3282b8;
-            --window-yellow: #fded75;
-            --window-pink: #f4a9c6;
-            --window-bg: #ffffff;
-            --text-main: #2b2b2b;
-            --text-muted: #6e6e6e;
-            --border-color: #2b2b2b;
-            --accent-green: #7ee081;
-            --close-red: #ff6b6b;
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            min-height: 100vh;
-            color: var(--text-main);
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #f7f9fc;
-            background-image: linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
-            background-size: 20px 20px;
-            padding: 20px 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow-x: hidden;
-        }
-
-        /* --- Loading Screen Overlay --- */
-        #loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #f7f9fc;
-            background-image: linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
-            background-size: 20px 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-
-        .loader-box {
-            background: white;
-            border: 4px solid var(--border-color);
-            border-radius: 12px;
-            padding: 24px 40px;
-            text-align: center;
-            box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.15);
-            animation: bounceIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .loader-title {
-            font-family: 'Fredoka', sans-serif;
-            font-size: 20px;
-            margin-bottom: 12px;
-            color: var(--window-blue);
-        }
-
-        .loader-bar-container {
-            width: 160px;
-            height: 16px;
-            background: #e2e8f0;
-            border: 3px solid var(--border-color);
-            border-radius: 4px;
-            overflow: hidden;
-            position: relative;
-            margin: 0 auto;
-        }
-
-        .loader-bar-progress {
-            width: 0%;
-            height: 100%;
-            background: var(--window-pink);
-            animation: fillProgress 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-
-        /* --- Main Menu Screen --- */
-        #main-menu-screen {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #f7f9fc;
-            background-image: linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
-            background-size: 20px 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9998;
-            opacity: 0;
-            transform: scale(0.97);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-            padding: 16px;
-        }
-
-        #main-menu-screen.show {
-            opacity: 1;
-            transform: scale(1);
-            display: flex;
-        }
-
-        .menu-box {
-            background: white;
-            border: 4px solid var(--border-color);
-            border-radius: 12px;
-            padding: 40px 20px;
-            text-align: center;
-            box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.15);
-            max-width: 460px;
-            width: 100%;
-        }
-
-        .menu-logo {
-            font-family: 'Fredoka', sans-serif;
-            font-weight: 700;
-            font-size: 42px;
-            color: var(--text-main);
-            margin-bottom: 16px;
-            letter-spacing: 3px;
-            line-height: 1;
-        }
-
-        .menu-title {
-            font-family: 'Fredoka', sans-serif;
-            font-size: 28px;
-            color: var(--window-blue);
-            margin: 0 0 12px 0;
-            font-weight: 700;
-            line-height: 1.2;
-        }
-
-        .menu-subtitle {
-            font-size: 14px;
-            color: var(--text-muted);
-            margin: 0 0 12px 0;
-            font-weight: 500;
-            line-height: 1.4;
-        }
-
-        .menu-note {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin: 0 auto 28px auto;
-            max-width: 340px;
-            font-weight: 400;
-            line-height: 1.4;
-        }
-
-        .start-btn {
-            background: var(--window-pink);
-            font-family: 'Fredoka', sans-serif;
-            font-weight: 700;
-            font-size: 18px;
-            border: 3px solid var(--border-color);
-            padding: 14px 40px;
-            border-radius: 8px;
-            cursor: pointer;
-            box-shadow: 4px 4px 0px var(--border-color);
-            transition: transform 0.2s, box-shadow 0.2s;
-            color: var(--text-main);
-        }
-
-        .start-btn:hover {
-            transform: translate(-2px, -2px);
-            box-shadow: 6px 6px 0px var(--border-color);
-        }
-
-        .start-btn:active {
-            transform: translate(0, 0);
-            box-shadow: 2px 2px 0px var(--border-color);
-        }
-
-        /* --- Main Browser Window Frame --- */
-        .browser-container {
-            width: min(1000px, 100%);
-            background: var(--window-bg);
-            border: 4px solid var(--border-color);
-            border-radius: 12px;
-            box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.15);
-            overflow: hidden;
-            display: none;
-            flex-direction: column;
-            opacity: 0;
-            transform: scale(0.97) translateY(10px);
-            transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
-                        transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-                        width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                        max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                        border-bottom-width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .browser-container.loaded {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-            display: flex;
-        }
-
-        .browser-container.maximized {
-            width: 100% !important;
-            max-width: 100% !important;
-        }
-
-        .browser-container.minimized {
-            border-bottom-width: 0px;
-        }
-
-        .browser-container .collapsible-wrapper {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            max-height: 2000px; /* High value to allow smooth accordion transition */
-            opacity: 1;
-            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
-                        opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .browser-container.minimized .collapsible-wrapper {
-            max-height: 0px !important;
-            opacity: 0;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        /* Top Title Bar */
-        .browser-header {
-            background-color: var(--window-yellow);
-            border-bottom: 4px solid var(--border-color);
-            padding: 10px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            user-select: none;
-        }
-
-        /* Adjust header border when container is minimized */
-        .browser-container.minimized .browser-header {
-            border-bottom-width: 0px;
-            transition: border-bottom-width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .window-title-group {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .window-logo {
-            font-family: 'Fredoka', sans-serif;
-            font-weight: 700;
-            font-size: 35px;
-            color: var(--text-main);
-            letter-spacing: 2px;
-            line-height: 1;
-        }
-
-        /* Window Controls Layout */
-        .window-controls {
-            display: flex;
-            gap: 6px;
-        }
-
-        .control-dot {
-            width: 28px;
-            height: 28px;
-            border: 2px solid var(--border-color);
-            border-radius: 6px;
-            background: #fff;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 13px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            padding: 0;
-            color: var(--text-main);
-            box-shadow: 2px 2px 0px var(--border-color);
-            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
-                        background-color 0.2s ease, 
-                        box-shadow 0.2s ease,
-                        color 0.2s ease;
-        }
-
-        .control-dot:hover {
-            transform: scale(1.08) translate(-1px, -1px);
-            box-shadow: 3px 3px 0px var(--border-color);
-        }
-        
-        .control-dot:active {
-            transform: scale(0.95) translate(0, 0);
-            box-shadow: 1px 1px 0px var(--border-color);
-        }
-
-        .control-dot.btn-minimize:hover {
-            background-color: var(--window-blue);
-            color: white;
-        }
-        .control-dot.btn-maximize:hover {
-            background-color: var(--accent-green);
-        }
-        .control-dot.btn-close:hover {
-            background-color: var(--close-red);
-            color: white;
-        }
-
-        /* Address Bar Row */
-        .address-bar-row {
-            background-color: var(--window-blue);
-            border-bottom: 4px solid var(--border-color);
-            padding: 10px 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .nav-arrows {
-            display: flex;
-            gap: 6px;
-            user-select: none;
-            flex-shrink: 0;
-        }
-
-        .nav-btn {
-            background: white;
-            border: 2px solid var(--border-color);
-            border-radius: 4px;
-            width: 28px;
-            height: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Fredoka', sans-serif;
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--text-main);
-            cursor: pointer;
-            box-shadow: 2px 2px 0px var(--border-color);
-            transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
-        }
-
-        .nav-btn:hover:not(:disabled) {
-            background-color: var(--window-yellow);
-            transform: translate(-1px, -1px);
-            box-shadow: 3px 3px 0px var(--border-color);
-        }
-
-        .nav-btn:active:not(:disabled) {
-            transform: translate(0, 0);
-            box-shadow: 1px 1px 0px var(--border-color);
-        }
-
-        .nav-btn:disabled {
-            background: #e2e8f0;
-            color: #a0aec0;
-            cursor: not-allowed;
-            box-shadow: none;
-            transform: none;
-        }
-
-        .mock-address-bar {
-            flex-grow: 1;
-            background: #ffffff;
-            border: 2px solid var(--border-color);
-            border-radius: 6px;
-            padding: 6px 14px;
-            font-size: 14px;
-            color: var(--text-muted);
-            font-weight: 500;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-        }
-
-        /* Workspace Matrix Core split layout */
-        .window-body {
-            display: grid;
-            grid-template-columns: 0.85fr 1.15fr;
-            min-height: 550px;
-            background: #ffffff;
-        }
-
-        /* Left Side Profile Panel */
-        .left-panel {
-            background-color: #ffffff;
-            border-right: 4px solid var(--border-color);
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-        }
-
-        .portrait-wrapper {
-            width: 100%;
-            max-width: 280px;
-            margin: 0 auto;
-            border: 4px solid var(--border-color);
-            border-radius: 8px;
-            overflow: hidden;
-            aspect-ratio: 1 / 1;
-            background: #eee;
-            box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .portrait-wrapper:hover {
-            transform: scale(1.03) rotate(-1deg);
-        }
-
-        .portrait-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .username-badge {
-            font-family: 'Fredoka', sans-serif;
-            font-size: 16px;
-            background-color: var(--window-pink);
-            color: var(--text-main);
-            padding: 8px;
-            border: 3px solid var(--border-color);
-            border-radius: 8px;
-            text-align: center;
-            font-weight: 700;
-            margin: 0;
-            box-shadow: 3px 3px 0px var(--border-color);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .username-badge:hover {
-            transform: translate(-1px, -1px);
-            box-shadow: 4px 4px 0px var(--border-color);
-        }
-
-        .bio-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .bio-list li {
-            font-size: 14px;
-            font-weight: 600;
-            background: #f1f5f9;
-            padding: 6px 12px;
-            border-radius: 6px;
-            border: 2px solid var(--border-color);
-            transition: transform 0.2s ease, background-color 0.2s ease;
-        }
-
-        .bio-list li:hover {
-            transform: translateX(4px);
-            background-color: #e2e8f0;
-        }
-
-        .collection-box {
-            border-top: 3px dashed var(--border-color);
-            padding-top: 14px;
-        }
-
-        .collection-title {
-            font-family: 'Fredoka', sans-serif;
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text-main);
-            margin-bottom: 8px;
-            background: var(--window-yellow);
-            padding: 4px 10px;
-            border: 2px solid var(--border-color);
-            border-radius: 6px;
-            width: fit-content;
-        }
-
-        .collection-box p {
-            font-size: 13px;
-            line-height: 1.5;
-            margin: 0 0 8px 0;
-        }
-
-        .collection-box strong {
-            color: var(--window-blue);
-        }
-
-        /* Right Side Content Terminal */
-        .right-panel {
-            background-color: #fff9fc;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Nav Tabs Layout row matrix */
-        .tab-navigation {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            background: var(--window-blue);
-            border-bottom: 4px solid var(--border-color);
-        }
-
-        .button {
-            appearance: none;
-            border: none;
-            border-right: 4px solid var(--border-color);
-            padding: 14px 4px;
-            background: #e2e8f0;
-            color: var(--text-main);
-            font-family: 'Fredoka', sans-serif;
-            font-weight: 700;
-            font-size: 13px;
-            text-align: center;
-            cursor: pointer;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
-        }
-
-        .button:last-child {
-            border-right: none;
-        }
-
-        .button:hover:not(.active) {
-            background: #cbd5e1;
-            transform: translateY(-2px);
-        }
-
-        .button:active {
-            transform: translateY(0);
-        }
-
-        .button.active {
-            background: var(--window-pink);
-            color: var(--text-main);
-            animation: tabPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        /* Workspace Info Display Panels */
-        .detail-panel {
-            padding: 30px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .detail-panel h3 {
-            margin: 0;
-            font-family: 'Fredoka', sans-serif;
-            font-size: 22px;
-            color: var(--window-blue);
-        }
-
-        .hud-divider {
-            height: 4px;
-            background: var(--border-color);
-            border-radius: 2px;
-        }
-
-        .tab-fade-in {
-            animation: contentFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-
-        .detail-content p {
-            margin: 0 0 16px 0;
-            font-size: 15px;
-            line-height: 1.6;
-            font-weight: 500;
-        }
-
-        .quick-specs {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-top: 10px;
-        }
-
-        .spec-item {
-            background: #ffffff;
-            padding: 12px;
-            border-radius: 8px;
-            border: 3px solid var(--border-color);
-            font-weight: 700;
-            font-size: 14px;
-            box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s ease;
-        }
-
-        .spec-item:hover {
-            transform: translateY(-2px);
-        }
-
-        .spec-item span {
-            color: var(--text-muted);
-            display: block;
-            font-size: 11px;
-            font-family: 'Fredoka', sans-serif;
-            text-transform: uppercase;
-            margin-bottom: 2px;
-        }
-
-        .detail-list {
-            margin: 0;
-            padding-left: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            font-size: 14px;
-            line-height: 1.6;
-        }
-
-        .detail-list li strong {
-            color: var(--window-blue);
-            font-family: 'Fredoka', sans-serif;
-        }
-
-        /* Footer Sticky note bar */
-        .footer {
-            background-color: var(--window-yellow);
-            border-top: 4px solid var(--border-color);
-            padding: 12px 20px;
-            text-align: center;
-            font-size: 13px;
-            font-weight: 700;
-        }
-
-        /* Session Closed Banner Screen Container */
-        #closed-screen {
-            display: none;
-            text-align: center;
-            background: white;
-            border: 4px solid var(--border-color);
-            border-radius: 12px;
-            padding: 40px 20px;
-            box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.15);
-            max-width: 400px;
-            width: 100%;
-            animation: bounceIn 0.5s ease forwards;
-            margin: auto;
-        }
-
-        #closed-screen h2 {
-            font-family: 'Fredoka', sans-serif;
-            color: var(--window-blue);
-            margin-top: 0;
-        }
-
-        .reopen-btn {
-            background: var(--window-pink);
-            font-family: 'Fredoka', sans-serif;
-            font-weight: 700;
-            border: 3px solid var(--border-color);
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            box-shadow: 4px 4px 0px var(--border-color);
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin-top: 12px;
-        }
-
-        .reopen-btn:hover {
-            transform: translate(-2px, -2px);
-            box-shadow: 6px 6px 0px var(--border-color);
-        }
-
-        /* --- Handheld/Mobile View Engine Stack Media Rules --- */
-        @media (max-width: 850px) {
-            body {
-                padding: 12px 8px;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-            }
-
-            .browser-container {
-                align-self: stretch;
-            }
-
-            .window-body {
-                grid-template-columns: 1fr;
-                min-height: auto;
-            }
-
-            .left-panel {
-                border-right: none;
-                border-bottom: 4px solid var(--border-color);
-                padding: 20px 16px;
-            }
-
-            .portrait-wrapper {
-                max-width: 200px;
-            }
-
-            .tab-navigation {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .button {
-                border-bottom: 4px solid var(--border-color);
-                padding: 12px 6px;
-            }
-
-            .button:nth-child(2),
-            .button:nth-child(4) {
-                border-right: none;
-            }
-
-            .button:nth-child(3),
-            .button:nth-child(4) {
-                border-bottom: none;
-            }
-
-            .detail-panel {
-                padding: 24px 16px;
-            }
-
-            .quick-specs {
-                grid-template-columns: 1fr;
-                gap: 8px;
-            }
-        }
-
-        /* Custom Keyframe Animations */
-        @keyframes bounceIn {
-            0% { transform: scale(0.3); opacity: 0; }
-            50% { transform: scale(1.05); opacity: 0.8; }
-            70% { transform: scale(0.9); opacity: 0.9; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        @keyframes fillProgress {
-            0% { width: 0%; }
-            100% { width: 100%; }
-        }
-
-        @keyframes tabPop {
-            0% { transform: scale(0.95); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes contentFadeIn {
-            0% { opacity: 0; transform: translateY(4px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-    </style>
-</head>
-<body>
-
-    <div id="loading-overlay">
-        <div class="loader-box">
-            <div class="loader-title">LOADING...</div>
-            <div class="loader-bar-container">
-                <div class="loader-bar-progress"></div>
-            </div>
-        </div>
-    </div>
-
-    <div id="main-menu-screen">
-        <div class="menu-box trigger-hover">
-            <div class="menu-logo">+x+</div>
-            <h1 class="menu-title">soobingummybear's website</h1>
-            <p class="menu-subtitle">~ Welcome! Press Start to Continue! ~</p>
-            <div class="menu-note">For mobile users, please use desktop site for best experience.</div>
-            <button class="start-btn trigger-hover" onclick="startApp()">START</button>
-        </div>
-    </div>
-
-    <div id="closed-screen">
-        <h2>Website Closed!</h2>
-        <p>You have minimized the website safely. You may press start again!</p>
-        <button class="reopen-btn trigger-hover" onclick="reopenWindow()">Start</button>
-    </div>
-
-    <main class="browser-container" id="main-window">
-        <header class="browser-header">
-            <div class="window-title-group">
-                <div class="window-logo">+x+</div>
-            </div>
-            <div class="window-controls">
-                <button class="control-dot btn-minimize trigger-hover" id="win-minimize" title="Minimize">—</button>
-                <button class="control-dot btn-maximize trigger-hover" id="win-maximize" title="Maximize">⧉</button>
-                <button class="control-dot btn-close trigger-hover" id="win-close" title="Close Window">✕</button>
-            </div>
-        </header>
-
-        <div class="collapsible-wrapper">
-            <div class="address-bar-row">
-                <div class="nav-arrows">
-                    <button class="nav-btn trigger-hover" id="nav-back" title="Back" disabled>⟨</button>
-                    <button class="nav-btn trigger-hover" id="nav-forward" title="Forward" disabled>⟩</button>
-                </div>
-                <div class="mock-address-bar" id="address-text">https://soobingummybear.com/</div>
-            </div>
-
-            <div class="window-body">
-                <article class="left-panel">
-                    <div class="portrait-wrapper trigger-hover">
-                        <img src="https://i.pinimg.com/originals/95/2c/db/952cdb5c74808ece2217e0dd8911d8e5.gif" alt="Soobin Arcade GIF">
-                    </div>
-
-                    <h1 class="username-badge trigger-hover">soobingummybear</h1>
-
-                    <ul class="bio-list">
-                        <li class="trigger-hover">drich</li>
-                        <li class="trigger-hover">he/him</li>
-                        <li class="trigger-hover">'06 liner</li>
-                        <li class="trigger-hover">3rd year BSCS student</li>
-                        <li class="trigger-hover">infp-t</li>
-                    </ul>
-
-                    <div class="collection-box">
-                        <div class="collection-title trigger-hover">STAN LIST</div>
-                        <p><strong>ults:</strong> zb1, and2ble, xdinary heroes, xlov, cravity, onlyoneof, txt</p>
-                        <p><strong>stan:</strong> day6, tbz, twice, fromis_9, red velvet, lucy, gfriend, loona, iz*one</p>
-                        <p><strong>casual:</strong> tws, bnd, bts, bp. ive, le sserafim, oneus, aespa, svt, enhypen, n.flying, illit, vixx, newjeans, onewe, xg, nmix, dreamcatcher, cortis, katseye</p>
-                    </div>
-                </article>
-
-                <article class="right-panel">
-                    <nav class="tab-navigation" role="tablist" aria-label="site menu">
-                        <button class="button trigger-hover" data-target="faqs" role="tab">FAQS</button>
-                        <button class="button trigger-hover" data-target="rules" role="tab">TERMS</button>
-                        <button class="button trigger-hover" data-target="byf" role="tab">BYF</button>
-                        <button class="button trigger-hover" data-target="links" role="tab">LINKS</button>
-                    </nav>
-
-                    <div class="detail-panel" id="detail-panel">
-                        <h3 id="detail-title">FAQS</h3>
-                        <div class="hud-divider"></div>
-                        <div id="dynamic-body"></div>
-                    </div>
-                </article>
-            </div>
-
-            <footer class="footer">
-                ✿ NOTICE: Review terms completely before claiming!
-            </footer>
-        </div>
-    </main>
-
-    <script>
-        // --- Retro 8-Bit Web Audio Engine ---
-        let audioCtx = null;
-        let loadingInterval = null;
-
-        function initAudio() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-        }
-
-        // 1. Hover Sound: Ultra light short micro-blip
-        function playHover() {
-            initAudio();
-            if (!audioCtx) return;
-
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-
-            osc.type = 'square';
-            osc.frequency.setValueAtTime(880, audioCtx.currentTime); // High pitch
-
-            gain.gain.setValueAtTime(0.015, audioCtx.currentTime); // Extra soft volume
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
-
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.03);
-        }
-
-        // 2. Loading Screen Ticker loop
-        function playLoadingTicking() {
-            initAudio();
-            if (!audioCtx) return;
-
-            let tickCounter = 0;
-            loadingInterval = setInterval(() => {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-
-                osc.type = 'triangle';
-                // Sweet rhythmic alternating 8bit ticks
-                const frequency = tickCounter % 2 === 0 ? 300 : 450;
-                osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
-
-                gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.05);
-                tickCounter++;
-            }, 150); // Tick speed matching loader duration
-        }
-
-        function stopLoadingTicking() {
-            if (loadingInterval) {
-                clearInterval(loadingInterval);
-                loadingInterval = null;
-            }
-        }
-
-        // 3. Tab & Regular Click Sound: Cohesive fast confirmation scale
-        function playTabClick() {
-            initAudio();
-            if (!audioCtx) return;
-
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-
-            osc.type = 'square';
-            osc.frequency.setValueAtTime(440, audioCtx.currentTime);
-            osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.04);
-
-            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
-
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.08);
-        }
-
-        // 4. Opening / Expanding Motif (Start, Maximize, Reopen, Unminimize) - Cheerful Low to High Scale
-        function playAppOpen() {
-            initAudio();
-            if (!audioCtx) return;
-
-            const now = audioCtx.currentTime;
-            const notes = [440, 587.33]; // A4 to D5 crisp interval
-            
-            notes.forEach((freq, index) => {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                
-                osc.type = 'square';
-                osc.frequency.setValueAtTime(freq, now + (index * 0.07));
-                
-                gain.gain.setValueAtTime(0.06, now + (index * 0.07));
-                gain.gain.exponentialRampToValueAtTime(0.001, now + (index * 0.07) + 0.09);
-                
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                
-                osc.start(now + (index * 0.07));
-                osc.stop(now + (index * 0.07) + 0.09);
-            });
-        }
-
-        // 5. Closing / Deactivating Motif (Minimize) - Reflected High to Low Scale
-        function playAppClose() {
-            initAudio();
-            if (!audioCtx) return;
-
-            const now = audioCtx.currentTime;
-            const notes = [587.33, 440]; // D5 down to A4 matching interval
-            
-            notes.forEach((freq, index) => {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                
-                osc.type = 'square';
-                osc.frequency.setValueAtTime(freq, now + (index * 0.07));
-                
-                gain.gain.setValueAtTime(0.06, now + (index * 0.07));
-                gain.gain.exponentialRampToValueAtTime(0.001, now + (index * 0.07) + 0.09);
-                
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                
-                osc.start(now + (index * 0.07));
-                osc.stop(now + (index * 0.07) + 0.09);
-            });
-        }
-
-        // 6. Terminating / Deletion Sound (Close ✕ Button) - 8-Bit Dying Slidestate Rumble Effect
-        function playAppTerminate() {
-            initAudio();
-            if (!audioCtx) return;
-
-            const now = audioCtx.currentTime;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-
-            // Use sawtooth wave for that harsh crunch, classic retro-death style
-            osc.type = 'sawtooth';
-            
-            // Rapidly slide the frequency down from 350Hz down to a sub-bass 60Hz rumble
-            osc.frequency.setValueAtTime(350, now);
-            osc.frequency.linearRampToValueAtTime(60, now + 0.28);
-
-            // Quick drop-off volume envelope
-            gain.gain.setValueAtTime(0.08, now);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
-
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-
-            osc.start(now);
-            osc.stop(now + 0.28);
-        }
-
-
-        const details = {
-            faqs: {
-                title: 'FREQUENTLY ASKED QUESTIONS',
-                html: `
-                    <p>Please refer to the following frequently asked questions for more information:</p>
-                    <div class="quick-specs">
-                        <div class="spec-item trigger-hover"><span>LOC</span>Marikina City</div>
-                        <div class="spec-item trigger-hover"><span>MOP</span>GCash</div>
-                        <div class="spec-item trigger-hover"><span>MOD</span>J&T Express / Flash Express / GGX / SDD Couriers</div>
-                        <div class="spec-item trigger-hover"><span>DOP</span>Payo / DOP with NRDP</div>
-                    </div>
-                `
-            },
-            rules: {
-                title: 'TERMS & CONDITIONS',
-                html: `
-                    <p>Please read our transactional boundaries safely before proceeding:</p>
-                    <ul class="detail-list">
-                        <li><strong>Item Condition:</strong> Disclosed per listing. As a casual collector, my items might not meet "mint" standards. Not recommended for highly sensitive buyers.</li>
-                        <li><strong>Cancellation:</strong> Cancellation fee applies at 70% of the total item price.</li>
-                        <li><strong>Shipping:</strong> Strictly no rush shipping. Dispatch occurs exclusively on my personal rest/free days.</li>
-                        <li><strong>Transit Liability:</strong> Once items are transferred to couriers, I hold no accountability for transit discrepancies, structural damage, or lost packages.</li>
-                    </ul>
-                `
-            },
-            byf: {
-                title: 'BEFORE YOU FOLLOW',
-                html: `
-                    <p>My Interactive Habits >< </p>
-                    <ul class="detail-list">
-                        <li>I tweet a lot from time to time.</li>
-                        <li>Exhibits casual profanity usage and frequent keyboard smashing.</li>
-                        <li>Active university student status means that I may go IA from time to time.</li>
-                        <li>Interaction friendly! Please don't be shy to talk or interact with me ^^</li>
-                    </ul>
-                `
-            },
-            links: {
-                title: 'EXTERNAL LINKS',
-                html: `
-                    <p>Official channels for feedback and communication:</p>
-                    <ul class="detail-list">
-                        <li>
-                            <strong>Feedbacks:</strong> 
-                            <a href="https://x.com/search?q=%23from_drich&src=hashtag_click" target="_blank" style="color:var(--window-blue); font-weight:bold; text-decoration:underline;">#from_drich</a> 
-                            on Twitter/X to view buyer reviews and proofs.
-                        </li>
-                        <li>
-                            <strong>Messaging:</strong> 
-                            <a href="https://x.com/messages/compose?recipient_id=soobingummybear" target="_blank" style="color:var(--window-blue); font-weight:bold; text-decoration:underline;">Click here to DM me</a> 
-                            directly for inquiries & claiming.
-                        </li>
-                    </ul>
-                `
-            }
-        };
-
-        const buttons = document.querySelectorAll('.button');
-        const titleEl = document.getElementById('detail-title');
-        const bodyEl = document.getElementById('dynamic-body');
-        const addressEl = document.getElementById('address-text');
-        const loadingOverlay = document.getElementById('loading-overlay');
-        const mainMenuScreen = document.getElementById('main-menu-screen');
-        const mainWindow = document.getElementById('main-window');
-        const closedScreen = document.getElementById('closed-screen');
-
-        const minimizeBtn = document.getElementById('win-minimize');
-        const maximizeBtn = document.getElementById('win-maximize');
-        const closeBtn = document.getElementById('win-close');
-
-        const backBtn = document.getElementById('nav-back');
-        const forwardBtn = document.getElementById('nav-forward');
-
-        // History Navigation Engine Memory States
-        let currentActiveTab = 'faqs';
-        let currentScreen = 'menu'; 
-        let backHistory = [];
-        let forwardHistory = [];
-        let isNavigatingHistory = false;
-
-        // Initialize ticking loader audio engine immediately on first user micro-interaction window scope
-        window.addEventListener('touchstart', initAudio, { once: true });
-        window.addEventListener('mousedown', initAudio, { once: true });
-
-        window.addEventListener('DOMContentLoaded', () => {
-            // Start loading chiptune ticks immediately
-            playLoadingTicking();
-
-            setTimeout(() => {
-                stopLoadingTicking();
-                loadingOverlay.style.opacity = '0';
-                setTimeout(() => {
-                    loadingOverlay.style.display = 'none';
-                    mainMenuScreen.classList.add('show');
-                }, 500);
-            }, 1300); 
-        });
-
-        // Universal Hover Audio Listener Bindings Engine
-        document.body.addEventListener('mouseenter', (event) => {
-            if (event.target && event.target.classList && event.target.classList.contains('trigger-hover')) {
-                playHover();
-            }
-        }, true);
-
-        function startApp() {
             playAppOpen();
-            if (!isNavigatingHistory) {
-                backHistory.push({ screen: 'menu' });
-                forwardHistory = []; 
-            }
-            
-            currentScreen = 'browser';
-            mainMenuScreen.classList.remove('show');
-            
-            setTimeout(() => {
-                mainMenuScreen.style.display = 'none';
-                mainWindow.style.display = 'flex';
-                void mainWindow.offsetWidth; 
-                mainWindow.classList.add('loaded');
-                setActive(currentActiveTab);
-            }, 500);
-        }
-
-        function showMainMenu() {
-            currentScreen = 'menu';
-            mainWindow.classList.remove('loaded');
-            
-            setTimeout(() => {
-                mainWindow.style.display = 'none';
-                mainMenuScreen.style.display = 'flex';
-                void mainMenuScreen.offsetWidth;
-                mainMenuScreen.classList.add('show');
-                addressEl.textContent = "https://soobingummybear.com/";
-                updateNavigationArrows();
-            }, 500);
-        }
-
-        function updateNavigationArrows() {
-            backBtn.disabled = backHistory.length === 0;
-            forwardBtn.disabled = forwardHistory.length === 0;
-        }
-
-        function setActive(target) {
-            const info = details[target];
-            if (!info) return;
-
-            if (!isNavigatingHistory && currentScreen === 'browser' && target !== currentActiveTab) {
-                backHistory.push({ screen: 'browser', tab: currentActiveTab });
-                forwardHistory = []; 
-            }
-
-            currentActiveTab = target; 
-
-            bodyEl.classList.remove('tab-fade-in');
-            void bodyEl.offsetWidth; 
-
-            titleEl.textContent = info.title;
-            bodyEl.innerHTML = info.html;
-            
-            addressEl.textContent = `https://soobingummybear.com/${target}`;
-            bodyEl.classList.add('tab-fade-in');
-
-            buttons.forEach((button) => {
-                const isActive = button.dataset.target === target;
-                button.classList.toggle('active', isActive);
-            });
-
-            updateNavigationArrows();
-        }
-
-        buttons.forEach((button) => {
-            button.addEventListener('click', () => {
-                playTabClick();
-                isNavigatingHistory = false;
-                setActive(button.dataset.target);
-            });
-        });
-
-        // History Navigation Events
-        backBtn.addEventListener('click', () => {
-            playTabClick();
-            if (backHistory.length > 0) {
-                isNavigatingHistory = true;
-                
-                if (currentScreen === 'browser') {
-                    forwardHistory.push({ screen: 'browser', tab: currentActiveTab });
-                } else {
-                    forwardHistory.push({ screen: 'menu' });
-                }
-
-                const previousState = backHistory.pop();
-
-                if (previousState.screen === 'menu') {
-                    showMainMenu();
-                } else {
-                    currentActiveTab = previousState.tab;
-                    if (currentScreen === 'menu') {
-                        startApp();
-                    } else {
-                        setActive(currentActiveTab);
-                    }
-                }
-            }
-        });
-
-        forwardBtn.addEventListener('click', () => {
-            playTabClick();
-            if (forwardHistory.length > 0) {
-                isNavigatingHistory = true;
-                
-                if (currentScreen === 'browser') {
-                    backHistory.push({ screen: 'browser', tab: currentActiveTab });
-                } else {
-                    backHistory.push({ screen: 'menu' });
-                }
-
-                const nextState = forwardHistory.pop();
-
-                if (nextState.screen === 'menu') {
-                    showMainMenu();
-                } else {
-                    currentActiveTab = nextState.tab;
-                    if (currentScreen === 'menu') {
-                        startApp();
-                    } else {
-                        setActive(currentActiveTab);
-                    }
-                }
-            }
-        });
-
-        // Window Control Operations
-        minimizeBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            
-            // Check if it's currently minimized BEFORE toggling the class
-            if (mainWindow.classList.contains('minimized')) {
-                // Window is being restored to normal size -> Play Open/Maximize sound
-                playAppOpen();
-            } else {
-                // Window is being shrunk down -> Play Close/Minimize sound
-                playAppClose();
-            }
-            
-            mainWindow.classList.toggle('minimized');
-        });
-
-        maximizeBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            mainWindow.classList.remove('minimized');
-            mainWindow.classList.toggle('maximized');
-            
-            // Check state to trigger appropriate cohesive chime
-            if (mainWindow.classList.contains('maximized')) {
-                playAppOpen();
-            } else {
-                playAppClose();
-            }
-            
-            maximizeBtn.textContent = mainWindow.classList.contains('maximized') ? '⧈' : '⧉';
-        });
-
-        closeBtn.addEventListener('click', (e) => {
-            // Trigger the special custom terminating/dying sound effect
-            playAppTerminate();
-            e.stopPropagation();
-            mainWindow.classList.remove('loaded');
-            setTimeout(() => {
-                mainWindow.style.display = 'none';
-                closedScreen.style.display = 'block';
-            }, 500);
-        });
-
-        window.reopenWindow = function() {
             closedScreen.style.display = 'none';
             isNavigatingHistory = true;
             if (currentScreen === 'menu') {
