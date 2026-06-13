@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@soobingummybear // BNS WINDOW</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --window-blue: #3282b8;
+            --window-yellow: #fded75;
+            --window-pink: #f4a9c6;
+            --window-bg: #ffffff;
+            --text-main: #2b2b2b;
+            --text-muted: #6e6e6e;
+            --border-color: #2b2b2b;
+            --accent-green: #7ee081;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f7f9fc;
+            /* Fun subtle retro grid background */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+            padding: 30px 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Main Browser Window Frame */
+        .browser-container {
+            width: min(1000px, 100%);
+            background: var(--window-bg);
+            border: 4px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Title Bar */
+        .browser-header {
+            background-color: var(--window-yellow);
+            border-bottom: 4px solid var(--border-color);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .window-title-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .window-logo {
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 700;
+            font-size: 20px;
+            color: var(--text-main);
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 6px;
+        }
+
+        .control-dot {
+            width: 14px;
+            height: 14px;
+            border: 2px solid var(--border-color);
+            border-radius: 3px;
+            background: #fff;
+        }
+
+        /* Address Bar Area */
+        .address-bar-row {
+            background-color: var(--window-blue);
+            border-bottom: 4px solid var(--border-color);
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-arrows {
+            display: flex;
+            gap: 8px;
+            color: #fff;
+            font-weight: bold;
+            font-size: 18px;
+            user-select: none;
+        }
+
+        .mock-address-bar {
+            flex-grow: 1;
+            background: #ffffff;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            padding: 6px 14px;
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* Content Layout split */
+        .window-body {
+            display: grid;
+            grid-template-columns: 0.85fr 1.15fr;
+            min-height: 550px;
+        }
+
+        /* Left Side Profile */
+        .left-panel {
+            background-color: #ffffff;
+            border-right: 4px solid var(--border-color);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        /* Portrait sizing optimizations */
+        .portrait-wrapper {
+            width: 100%;
+            max-width: 280px; /* Restricts it from getting huge on big screens */
+            margin: 0 auto;   /* Centers it in the column */
+            border: 4px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 1 / 1; /* Crisp square crop to beautifully frame the character */
+            background: #eee;
+            box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.05);
+        }
+
+        .portrait-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 20%; /* Gently adjusts framing to keep focus on the eyes/face */
+        }
+
+        .username-badge {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 16px;
+            background-color: var(--window-pink);
+            color: var(--text-main);
+            padding: 8px;
+            border: 3px solid var(--border-color);
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 700;
+            margin: 0;
+            box-shadow: 3px 3px 0px var(--border-color);
+        }
+
+        .bio-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .bio-list li {
+            font-size: 14px;
+            font-weight: 600;
+            background: #f1f5f9;
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 2px solid var(--border-color);
+        }
+
+        .collection-box {
+            border-top: 3px dashed var(--border-color);
+            padding-top: 14px;
+        }
+
+        .collection-title {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            background: var(--window-yellow);
+            padding: 4px 10px;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            width: fit-content;
+        }
+
+        .collection-box p {
+            font-size: 13px;
+            line-height: 1.5;
+            margin: 0 0 8px 0;
+            color: var(--text-main);
+        }
+
+        .collection-box strong {
+            color: var(--window-blue);
+        }
+
+        /* Right Side Content Terminal */
+        .right-panel {
+            background-color: #fff9fc;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Tab Navigation Bar */
+        .tab-navigation {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            background: var(--window-blue);
+            border-bottom: 4px solid var(--border-color);
+        }
+
+        .button {
+            appearance: none;
+            border: none;
+            border-right: 4px solid var(--border-color);
+            padding: 14px 8px;
+            background: #e2e8f0;
+            color: var(--text-main);
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .button:last-child {
+            border-right: none;
+        }
+
+        .button:hover {
+            background: #cbd5e1;
+        }
+
+        .button.active {
+            background: var(--window-pink);
+            color: var(--text-main);
+        }
+
+        .button small {
+            display: none; 
+        }
+
+        /* Info Workspace Panels */
+        .detail-panel {
+            padding: 30px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .detail-panel h3 {
+            margin: 0;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 22px;
+            color: var(--window-blue);
+        }
+
+        .hud-divider {
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+        }
+
+        .detail-content p {
+            margin: 0 0 16px 0;
+            color: var(--text-main);
+            font-size: 15px;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        /* Info Display Sub-blocks */
+        .quick-specs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .spec-item {
+            background: #ffffff;
+            padding: 12px;
+            border-radius: 8px;
+            border: 3px solid var(--border-color);
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.05);
+        }
+
+        .spec-item span {
+            color: var(--text-muted);
+            display: block;
+            font-size: 11px;
+            font-family: 'Fredoka', sans-serif;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .detail-list {
+            margin: 0;
+            padding-left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            font-size: 14px;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .detail-list li strong {
+            color: var(--window-blue);
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        /* Footer Sticky note style */
+        .footer {
+            background-color: var(--window-yellow);
+            border-top: 4px solid var(--border-color);
+            padding: 12px 20px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        /* Responsive Settings */
+        @media (max-width: 800px) {
+            .window-body {
+                grid-template-columns: 1fr;
+            }
+            .left-panel {
+                border-right: none;
+                border-bottom: 4px solid var(--border-color);
+                padding: 20px;
+            }
+            .portrait-wrapper {
+                max-width: 220px; /* Gently scales down on mobile view ports so it is not overwhelming */
+            }
+            .tab-navigation {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .button {
+                border-bottom: 2px solid var(--border-color);
+            }
+            .button:nth-child(even) {
+                border-right: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <main class="browser-container">
+        <header class="browser-header">
+            <div class="window-title-group">
+                <div class="window-logo">✦ +x+ ✦</div>
+            </div>
+            <div class="window-controls">
+                <div class="control-dot"></div>
+                <div class="control-dot"></div>
+                <div class="control-dot"></div>
+            </div>
+        </header>
+
+        <div class="address-bar-row">
+            <div class="nav-arrows">← &nbsp; →</div>
+            <div class="mock-address-bar">https://www.bns-arcade.shop/soobingummybear</div>
+        </div>
+
+        <div class="window-body">
+            <article class="left-panel">
+                <div class="portrait-wrapper">
+                    <img src="https://i.pinimg.com/1200x/9c/46/a9/9c46a915eb6b867ed66f931602cdad94.jpg" alt="Soobin Arcade Portrait">
+                </div>
+
+                <h1 class="username-badge">soobingummybear</h1>
+
+                <ul class="bio-list">
+                    <li>drich</li>
+                    <li>he/him</li>
+                    <li>'06 liner</li>
+                    <li>3rd year BSCS student</li>
+                    <li>infp-t</li>
+                </ul>
+
+                <div class="collection-box">
+                    <div class="collection-title">COLLECTION</div>
+                    <p><strong>ults:</strong> zb1, and2ble, xdinary heroes, xlov, cravity, onlyoneof, txt</p>
+                    <p><strong>stan:</strong> day6, tbz, twice, fromis_9, red velvet, lucy, gfriend, loona</p>
+                    <p><strong>casual:</strong> tws, bnd, ive, le sserafim, oneus, aespa, svt, enhypen, n.flying, illit, vixx, newjeans, onewe, xg, nmixx</p>
+                </div>
+            </article>
+
+            <article class="right-panel">
+                <nav class="tab-navigation" role="tablist" aria-label="site menu">
+                    <button class="button active" data-target="faqs" role="tab" aria-selected="true">FAQS</button>
+                    <button class="button" data-target="rules" role="tab" aria-selected="false">TERMS</button>
+                    <button class="button" data-target="byf" role="tab" aria-selected="false">BYF</button>
+                    <button class="button" data-target="links" role="tab" aria-selected="false">LINKS</button>
+                </nav>
+
+                <div class="detail-panel" id="detail-panel" aria-live="polite">
+                    <h3 id="detail-title">FAQS INFOPACK</h3>
+                    <div class="hud-divider" aria-hidden="true"></div>
+                    <div id="dynamic-body"></div>
+                </div>
+            </article>
+        </div>
+
+        <footer class="footer">
+            ✿ NOTICE: Review terms completely before making claims via direct message!
+        </footer>
+    </main>
+
+    <script>
+        const details = {
+            faqs: {
+                title: 'FAQS INFOPACK',
+                html: `
+                    <p>Core shop operations, location properties, and structural transaction parameters:</p>
+                    <div class="quick-specs">
+                        <div class="spec-item"><span>LOC</span>Marikina City</div>
+                        <div class="spec-item"><span>MOP</span>GCash</div>
+                        <div class="spec-item"><span>MOD</span>J&T / Flash Express / GGX / SDD Couriers</div>
+                        <div class="spec-item"><span>DOP</span>Payo / DOP with NRDP</div>
+                    </div>
+                `
+            },
+            rules: {
+                title: 'TERMS & CONDITIONS',
+                html: `
+                    <p>Please read our transactional boundaries safely before proceeding:</p>
+                    <ul class="detail-list">
+                        <li><strong>Cancellation Protocol:</strong> Cancellation fee applies at 50% of the total item price.</li>
+                        <li><strong>Shipping Speed:</strong> Strictly no rush shipping. Dispatch occurs exclusively on personal rest/free days.</li>
+                        <li><strong>Transit Liability:</strong> Once items are transferred to couriers, the shop holds no accountability for transit discrepancies, structural damage, or lost packages.</li>
+                    </ul>
+                `
+            },
+            byf: {
+                title: 'BEFORE YOU FOLLOW',
+                html: `
+                    <p>Personal profile parameters and interactive habits:</p>
+                    <ul class="detail-list">
+                        <li>Prone to periods of highly talkative behavior.</li>
+                        <li>Exhibits casual profanity usage and frequent keyboard smashing.</li>
+                        <li>Active university student status means account status can transition to <strong>IA (Inactive)</strong> from time to time.</li>
+                        <li>Interaction friendly! Please don't be shy to talk or interact with me ^^</li>
+                    </ul>
+                `
+            },
+            links: {
+                title: 'EXTERNAL LINKS',
+                html: `
+                    <p>Verified access channels for validity verification:</p>
+                    <ul class="detail-list">
+                        <li><strong>Feedbacks:</strong> Search the hashtag <span style="color:var(--window-blue); font-weight:bold;">#fromdrich</span> on Twitter/X to view archived client feedback logs.</li>
+                        <li><strong>Claims Desk:</strong> Slide directly into our DMs to initialize a claim workspace session.</li>
+                    </ul>
+                `
+            }
+        };
+
+        const buttons = document.querySelectorAll('.button');
+        const titleEl = document.getElementById('detail-title');
+        const bodyEl = document.getElementById('dynamic-body');
+
+        function setActive(target) {
+            const info = details[target];
+            if (!info) return;
+
+            titleEl.textContent = info.title;
+            bodyEl.innerHTML = info.html;
+
+            buttons.forEach((button) => {
+                const isActive = button.dataset.target === target;
+                button.classList.toggle('active', isActive);
+                button.setAttribute('aria-selected', String(isActive));
+            });
+        }
+
+        // Initialize default view
+        setActive('faqs');
+
+        buttons.forEach((button) => {
+            button.addEventListener('click', () => setActive(button.dataset.target));
+        });
+    </script>
+</body>
+</html>
