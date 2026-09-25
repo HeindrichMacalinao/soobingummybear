@@ -1,6 +1,6 @@
 # soobingummybear 🧸✨🐰
 
-A playful, retro-inspired static website built for a personal X/Twitter K-pop buy-and-sell account. It replicates and takes inspiration from TOMORROW X TOGETHER'S minisode1 : Blue Hour mini album. The website's design is a nostalgic desktop operating system experience complete with a boot-up sequence, vintage window controls, dynamic tabs, animated transitions, and delightful sound effects.
+A playful, retro-inspired static website built for a personal X/Twitter K-pop buy-and-sell account. It replicates and takes inspiration from TOMORROW X TOGETHER'S minisode1: Blue Hour mini album. The website's design is a nostalgic desktop operating system experience complete with a boot-up sequence, vintage window controls, dynamic tabs, animated transitions, and delightful sound effects.
 
 ---
 
