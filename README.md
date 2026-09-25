@@ -1,12 +1,12 @@
 # soobingummybear 🧸✨🐰
 
-A playful, retro-inspired static website built for a personal X/Twitter K-pop buy-and-sell account. It replicates and takes inspiration from TOMORROW X TOGETHER'S minisode1: Blue Hour mini album. The website's design is a nostalgic desktop operating system experience complete with a boot-up sequence, vintage window controls, dynamic tabs, animated transitions, and delightful sound effects.
+A playful, retro-inspired static website built for a personal X/Twitter K-pop buy-and-sell account. Heavily inspired by the nostalgic, sunset-soaked aesthetics of TOMORROW X TOGETHER'S minisode1: Blue Hour mini album, the site replicates a vintage desktop operating system experience complete with a custom boot-up sequence, retro window controls, dynamic tabs, animated transitions, and delightful sound effects.
 
 ---
 
 ## 🌐 Live Demo
 
-🌐 **Live Preview:** [soobingummybear.vercel.app](https://soobingummybear.vercel.app)
+🧸 **Take it for a spin:** [soobingummybear.vercel.app](https://soobingummybear.vercel.app)
 
 ---
 
