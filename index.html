@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>soobingummybear 👾</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div id="loading-overlay" role="status" aria-live="polite" aria-label="Loading website">
+        <div class="loader-box">
+            <div class="loader-title">LOADING...</div>
+            <div class="loader-bar-container" aria-hidden="true">
+                <div class="loader-bar-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <section id="main-menu-screen" hidden aria-label="Start menu">
+        <div class="menu-box">
+            <div class="menu-logo" aria-hidden="true">+x+</div>
+            <h1 class="menu-title">soobingummybear's website</h1>
+            <p class="menu-subtitle">~ Welcome! Press Start to Continue! ~</p>
+            <p class="menu-note">For mobile users, please use desktop site for best experience.</p>
+            <button id="start-btn" class="start-btn" type="button" title="Start website">START</button>
+        </div>
+    </section>
+
+    <section id="closed-screen" hidden aria-label="Website closed screen">
+        <h2>Website Closed!</h2>
+        <p>You have minimized the website safely. You may press start again!</p>
+        <button id="reopen-btn" class="reopen-btn" type="button" title="Reopen website">Start</button>
+    </section>
+
+    <main class="browser-container" id="main-window" hidden>
+        <header class="browser-header">
+            <div class="window-title-group">
+                <div class="window-logo" aria-hidden="true">+x+</div>
+            </div>
+            <div class="window-controls">
+                <button class="control-dot btn-minimize" id="win-minimize" type="button" title="Minimize" aria-label="Minimize window">—</button>
+                <button class="control-dot btn-maximize" id="win-maximize" type="button" title="Maximize" aria-label="Maximize window">⧉</button>
+                <button class="control-dot btn-close" id="win-close" type="button" title="Close Window" aria-label="Close window">✕</button>
+            </div>
+        </header>
+
+        <div class="collapsible-wrapper">
+            <div class="address-bar-row">
+                <div class="nav-arrows" aria-label="Navigation history">
+                    <button class="nav-btn" id="nav-back" type="button" title="Back" aria-label="Back" disabled>⟨</button>
+                    <button class="nav-btn" id="nav-forward" type="button" title="Forward" aria-label="Forward" disabled>⟩</button>
+                </div>
+                <div class="mock-address-bar" id="address-text">https://soobingummybear.com/</div>
+            </div>
+
+            <div class="window-body">
+                <article class="left-panel">
+                    <figure class="portrait-wrapper">
+                        <img src="https://i.pinimg.com/originals/95/2c/db/952cdb5c74808ece2217e0dd8911d8e5.gif" alt="Soobin Arcade GIF">
+                    </figure>
+
+                    <h1 class="username-badge">soobingummybear</h1>
+
+                    <ul class="bio-list">
+                        <li>drich</li>
+                        <li>he/him</li>
+                        <li>'06 liner</li>
+                        <li>3rd year BSCS student</li>
+                        <li>infp-t</li>
+                    </ul>
+
+                    <section class="collection-box" aria-label="Stan list">
+                        <h2 class="collection-title">STAN LIST</h2>
+                        <p><strong>ults:</strong> zb1, and2ble, xdinary heroes, xlov, cravity, onlyoneof, txt</p>
+                        <p><strong>stan:</strong> day6, tbz, twice, fromis_9, red velvet, lucy, gfriend, loona, iz*one</p>
+                        <p><strong>casual:</strong> tws, bnd, bts, bp. ive, le sserafim, oneus, aespa, svt, enhypen, n.flying, illit, vixx, newjeans, onewe, xg, nmix, dreamcatcher, cortis, katseye</p>
+                    </section>
+                </article>
+
+                <article class="right-panel">
+                    <nav class="tab-navigation" role="tablist" aria-label="Site menu">
+                        <button class="button" data-target="faqs" role="tab" type="button">FAQS</button>
+                        <button class="button" data-target="rules" role="tab" type="button">TERMS</button>
+                        <button class="button" data-target="byf" role="tab" type="button">BYF</button>
+                        <button class="button" data-target="links" role="tab" type="button">LINKS</button>
+                    </nav>
+
+                    <section class="detail-panel" id="detail-panel">
+                        <h3 id="detail-title">FAQS</h3>
+                        <div class="hud-divider"></div>
+                        <div id="dynamic-body" role="tabpanel" aria-live="polite"></div>
+                    </section>
+                </article>
+            </div>
+
+            <footer class="footer">
+                ✿ NOTICE: Review terms completely before claiming!
+            </footer>
+        </div>
+    </main>
+
+    <script src="js/content.js" defer></script>
+    <script src="js/audio.js" defer></script>
+    <script src="js/app.js" defer></script>
+</body>
+</html>
