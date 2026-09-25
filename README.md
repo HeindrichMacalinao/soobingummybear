@@ -31,6 +31,7 @@ A playful, retro-inspired static website built for a personal X/Twitter K-pop bu
     ├── app.js
     ├── audio.js
     └── content.js
+```
 
 ---
 
