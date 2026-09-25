@@ -31,3 +31,14 @@ A playful, retro-inspired static website built for a personal X/Twitter K-pop bu
     ├── app.js
     ├── audio.js
     └── content.js
+
+---
+
+## 🗺️ What to Expect Soon
+
+Here is a sneak peek at what features and updates are currently in development:
+
+*   [ ] **Live Inventory Grid:** A dedicated shop window to showcase current buy/sell photocards and merch items complete with real-time status tags (*Available*, *Pending*, *Sold*).
+*   [ ] **Interactive Sticky Notes:** A virtual bulletin board allowing visitors to click, read, or leave cute digital post-it notes and feedback.
+*   [ ] **Audio Toggle Switch:** A permanent, easy-to-reach global mute/unmute control right on the retro taskbar or window header.
+*   [ ] **Mobile Optimization Polish:** Enhanced touch-drag physics and responsive scaling so the desktop OS experience feels seamless on smartphones.
