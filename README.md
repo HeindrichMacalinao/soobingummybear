@@ -6,7 +6,7 @@ A playful, retro-inspired static website built for a personal X/Twitter K-pop bu
 
 ## 🌐 Live Demo
 
-You can view and interact with the live site here: soobingummybear.vercel.app
+🌐 **Live Preview:** [soobingummybear.vercel.app](https://soobingummybear.vercel.app)
 
 ---
 
